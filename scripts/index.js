@@ -1,7 +1,9 @@
+// Забираем шаблон
+const cardTemplate = document.querySelector('#card-template').content;
+
 // Функция для создания карточки
 function createCard(cardData, deleteCard) {
   // Клонируем шаблон
-  const cardTemplate = document.querySelector('#card-template').content;
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
 
   // Объявляем переменные элементов
