@@ -1,15 +1,37 @@
 // Забираем шаблон
-const cardTemplate = document.querySelector('#card-template').content;
+const cardTemplate = document.querySelector('#card-template');
 
 // Функция для создания карточки
-function createCard(cardData, deleteCard) {
-  // Клонируем шаблон
-  const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
+function createCard(cardData, cardTemplate, deleteCard) {
+
+  // Проверяем наличие шаблона
+  if (!cardTemplate) {
+    console.error('Отсутствует шаблон');
+    return;
+  }
+
+  // Выбираем карточку
+  const cardElement = cardTemplate.content.querySelector('.card');
+
+  // Проверяем наличие карточки
+  if (!cardElement) {
+    console.error('Отсутствует карточка');
+    return;
+  }
+
+  // Клонируем карточку
+  const clonedCardElement = cardElement.cloneNode(true);
 
   // Объявляем переменные элементов
-  const cardImage = cardElement.querySelector('.card__image');
-  const cardTitle = cardElement.querySelector('.card__title');
-  const cardDeleteButton = cardElement.querySelector('.card__delete-button');
+  const cardImage = clonedCardElement.querySelector('.card__image');
+  const cardTitle = clonedCardElement.querySelector('.card__title');
+  const cardDeleteButton = clonedCardElement.querySelector('.card__delete-button');
+
+  // Проверяем наличие элементов
+  if (!(cardImage || cardTitle || cardDeleteButton)) {
+    console.error('Отсутствуют важные элементы карточки');
+    return;
+  }
 
   // Устанавливаем значения элементов карточки
   cardImage.src = cardData.link;
@@ -17,10 +39,10 @@ function createCard(cardData, deleteCard) {
   cardTitle.textContent = cardData.name;
 
   // Добавляем обработчик клика для кнопки удаления
-  cardDeleteButton.addEventListener('click', () => deleteCard(cardElement));
+  cardDeleteButton.addEventListener('click', () => deleteCard(clonedCardElement));
 
   // Возвращаем сгенерированную карточку
-  return cardElement;
+  return clonedCardElement;
 }
 
 // Функция удаления карточки
@@ -32,7 +54,7 @@ function deleteCard(cardElement) {
 const cardsContainer = document.querySelector('.places__list');
 
 // Выводим все карточки из массива initialCards
-initialCards.forEach(cardData => {
-  const cardElement = createCard(cardData, deleteCard);
+initialCards.forEach(initialCard => {
+  const cardElement = createCard(initialCard, cardTemplate, deleteCard);
   cardsContainer.appendChild(cardElement);
 });
