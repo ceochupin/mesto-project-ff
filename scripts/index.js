@@ -56,3 +56,7 @@ initialCards.forEach(initialCard => {
   const cardElement = createCard(initialCard, cardTemplate, deleteElement);
   cardsContainer.appendChild(cardElement);
 });
+
+// Текущий год в футере
+const currentYear = new Date().getFullYear();
+document.querySelector('#year').textContent = currentYear;
