@@ -1,8 +1,11 @@
 // Забираем шаблон
 const cardTemplate = document.querySelector('#card-template');
 
+// Находим контейнер для карточек
+const cardsContainer = document.querySelector('.places__list');
+
 // Функция для создания карточки
-function createCard(cardData, cardTemplate, deleteCard) {
+const createCard = (cardData, cardTemplate, deleteCard) => {
 
   // Проверяем наличие шаблона
   if (!cardTemplate) {
@@ -45,16 +48,11 @@ function createCard(cardData, cardTemplate, deleteCard) {
   return clonedCardElement;
 }
 
-// Функция удаления карточки
-function deleteCard(cardElement) {
-  cardElement.remove();
-}
-
-// Находим контейнер для карточек
-const cardsContainer = document.querySelector('.places__list');
+// Функция удаления
+const deleteElement = element => element.remove();
 
 // Выводим все карточки из массива initialCards
 initialCards.forEach(initialCard => {
-  const cardElement = createCard(initialCard, cardTemplate, deleteCard);
+  const cardElement = createCard(initialCard, cardTemplate, deleteElement);
   cardsContainer.appendChild(cardElement);
 });
