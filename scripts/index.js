@@ -57,6 +57,6 @@ initialCards.forEach(initialCard => {
   cardsContainer.appendChild(cardElement);
 });
 
-// Текущий год в футере
+// Копирайт и текущий год в футере
 const currentYear = new Date().getFullYear();
-document.querySelector('#year').textContent = currentYear;
+document.querySelector('.footer__copyright').textContent = `© ${currentYear} Mesto Russia`;
