@@ -1,24 +1,24 @@
 // Забираем шаблон
-const cardTemplate = document.querySelector('#card-template');
+const cardTemplate = document.querySelector("#card-template");
 
 // Находим контейнер для карточек
-const cardsContainer = document.querySelector('.places__list');
+const cardsContainer = document.querySelector(".places__list");
 
 // Функция для создания карточки
 const createCard = (cardData, cardTemplate, deleteCard) => {
 
   // Проверяем наличие шаблона
   if (!cardTemplate) {
-    console.error('Отсутствует шаблон');
+    console.error("Отсутствует шаблон");
     return;
   }
 
   // Выбираем карточку
-  const cardElement = cardTemplate.content.querySelector('.card');
+  const cardElement = cardTemplate.content.querySelector(".card");
 
   // Проверяем наличие карточки
   if (!cardElement) {
-    console.error('Отсутствует карточка');
+    console.error("Отсутствует карточка");
     return;
   }
 
@@ -26,13 +26,13 @@ const createCard = (cardData, cardTemplate, deleteCard) => {
   const clonedCardElement = cardElement.cloneNode(true);
 
   // Объявляем переменные элементов
-  const cardImage = clonedCardElement.querySelector('.card__image');
-  const cardTitle = clonedCardElement.querySelector('.card__title');
-  const cardDeleteButton = clonedCardElement.querySelector('.card__delete-button');
+  const cardImage = clonedCardElement.querySelector(".card__image");
+  const cardTitle = clonedCardElement.querySelector(".card__title");
+  const cardDeleteButton = clonedCardElement.querySelector(".card__delete-button");
 
   // Проверяем наличие элементов
   if (!(cardImage || cardTitle || cardDeleteButton)) {
-    console.error('Отсутствуют важные элементы карточки');
+    console.error("Отсутствуют важные элементы карточки");
     return;
   }
 
@@ -42,7 +42,7 @@ const createCard = (cardData, cardTemplate, deleteCard) => {
   cardTitle.textContent = cardData.name;
 
   // Добавляем обработчик клика для кнопки удаления
-  cardDeleteButton.addEventListener('click', () => deleteCard(clonedCardElement));
+  cardDeleteButton.addEventListener("click", () => deleteCard(clonedCardElement));
 
   // Возвращаем сгенерированную карточку
   return clonedCardElement;
@@ -59,4 +59,4 @@ initialCards.forEach(initialCard => {
 
 // Копирайт и текущий год в футере
 const currentYear = new Date().getFullYear();
-document.querySelector('.footer__copyright').textContent = `© ${currentYear} Mesto Russia`;
+document.querySelector(".footer__copyright").textContent = `© ${currentYear} Mesto Russia`;
