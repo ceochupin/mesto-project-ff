@@ -50,7 +50,6 @@ module.exports = {
         generator: {
           filename: "images/[name].[hash][ext]",
         },
-        include: [path.resolve(__dirname, "src/images")],
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
