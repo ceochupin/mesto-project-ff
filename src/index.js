@@ -1,13 +1,4 @@
-import logoImage from './images/logo.svg';
-import avatarImage from './images/avatar.jpg';
-
-const defaultImagesPage = [{ name: 'Логотип', link: logoImage }];
-
-document.addEventListener('DOMContentLoaded', () => {
-  const profileImage = document.querySelector('.profile__image');
-  profileImage.style.backgroundImage = `url(${avatarImage})`;
-});
-
+import './pages/index.css';
 import { initialCards } from './scripts/cards.js';
 
 // Забираем шаблон
@@ -67,7 +58,3 @@ initialCards.forEach(initialCard => {
   const cardElement = createCard(initialCard, cardTemplate, deleteElement);
   cardsContainer.appendChild(cardElement);
 });
-
-// Копирайт и текущий год в футере
-const currentYear = new Date().getFullYear();
-document.querySelector('.footer__copyright').textContent = `© ${currentYear} Mesto Russia`;
