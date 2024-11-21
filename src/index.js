@@ -1,60 +1,42 @@
 import './pages/index.css';
 import { initialCards } from './scripts/cards.js';
 
-// Забираем шаблон
-const cardTemplate = document.querySelector('#card-template');
-
-// Находим контейнер для карточек
+const cardTemplate = document.querySelector('#card-template').content;
 const cardsContainer = document.querySelector('.places__list');
 
-// Функция для создания карточки
-const createCard = (cardData, cardTemplate, deleteCard) => {
-  // Проверяем наличие шаблона
-  if (!cardTemplate) {
-    console.error('Отсутствует шаблон');
-    return;
-  }
+const createCard = (cardData, deleteCard) => {
+  const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
 
-  // Выбираем карточку
-  const cardElement = cardTemplate.content.querySelector('.card');
+  const cardImage = cardElement.querySelector('.card__image');
+  const cardTitle = cardElement.querySelector('.card__title');
+  const cardDeleteButton = cardElement.querySelector('.card__delete-button');
 
-  // Проверяем наличие карточки
-  if (!cardElement) {
-    console.error('Отсутствует карточка');
-    return;
-  }
-
-  // Клонируем карточку
-  const clonedCardElement = cardElement.cloneNode(true);
-
-  // Объявляем переменные элементов
-  const cardImage = clonedCardElement.querySelector('.card__image');
-  const cardTitle = clonedCardElement.querySelector('.card__title');
-  const cardDeleteButton = clonedCardElement.querySelector('.card__delete-button');
-
-  // Проверяем наличие элементов
-  if (!(cardImage || cardTitle || cardDeleteButton)) {
-    console.error('Отсутствуют важные элементы карточки');
-    return;
-  }
-
-  // Устанавливаем значения элементов карточки
   cardImage.src = cardData.link;
   cardImage.alt = cardData.name;
   cardTitle.textContent = cardData.name;
 
-  // Добавляем обработчик клика для кнопки удаления
-  cardDeleteButton.addEventListener('click', () => deleteCard(clonedCardElement));
+  cardDeleteButton.addEventListener('click', () => deleteCard(cardElement));
 
-  // Возвращаем сгенерированную карточку
-  return clonedCardElement;
+  return cardElement;
 };
 
-// Функция удаления
 const deleteElement = element => element.remove();
 
-// Выводим все карточки из массива initialCards
 initialCards.forEach(initialCard => {
-  const cardElement = createCard(initialCard, cardTemplate, deleteElement);
-  cardsContainer.appendChild(cardElement);
+  const cardElement = createCard(initialCard, deleteElement);
+  cardsContainer.append(cardElement);
+});
+
+const editProfileButton = document.querySelector('.profile__edit-button');
+const popupEdit = document.querySelector('.popup_type_edit');
+const closeButton = document.querySelector('.popup__close');
+
+const editProfileForm = document.forms['edit-profile'];
+
+closeButton.addEventListener('click', () => {
+  popupEdit.classList.remove('popup_is-opened');
+});
+
+editProfileButton.addEventListener('click', () => {
+  popupEdit.classList.add('popup_is-opened');
 });
