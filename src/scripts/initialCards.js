@@ -1,3 +1,4 @@
+// массив с данными для карточек
 export const initialCards = [
   {
     name: 'Архыз',
