@@ -8,16 +8,10 @@ import './pages/index.css';
 // массив с данными для карточек
 import { initialCards } from './scripts/initialCards.js';
 
-// функция создания карточек
-import { createCard } from './scripts/card.js';
+// функции создания карточек, лайков и удаления
+import { createCard, likeCard, deleteCard } from './scripts/card.js';
 
-// функция удаления элементов
-import { deleteElement } from './scripts/deleteElement.js';
-
-// функция лайков
-import { liked } from './scripts/like.js';
-
-// открытие модального окна
+// открытие и закрытие модального окна
 import { openPopup, closePopup } from './scripts/modals.js';
 
 
@@ -55,8 +49,14 @@ const popupNewCard = document.querySelector('.popup_type_new-card');
 // форма добавления новой карточки
 const addCardForm = document.forms['new-place'];
 
-// попап картинки
+// попап для картинки на весь экран
 const popupImage = document.querySelector('.popup_type_image');
+
+// картинка в попапе
+const imageInPopup = popupImage.querySelector('.popup__image');
+
+// описание для картинки в попапе
+const captionInPopup = popupImage.querySelector('.popup__caption');
 
 // все модальные окна
 const modals = document.querySelectorAll('.popup');
@@ -66,26 +66,33 @@ const modals = document.querySelectorAll('.popup');
 * ЛОГИКА РАБОТЫ ПРИЛОЖЕНИЯ
 \**********************************/
 
-// функция рендеринга карточки
-const renderCard = (cardData) => {
-  const card = createCard(cardData, {
-    cardTemplate: cardTemplate,
-    popupImage: popupImage,
-    likeCard: liked,
-    deleteCard: deleteElement,
-    openPopupImage: openPopup
-  });
+// обработчик клика на картинку
+const handleImageClick = cardData => {
+  imageInPopup.src = cardData.link;
+  imageInPopup.alt = cardData.name;
+  captionInPopup.textContent = cardData.name;
+  openPopup(popupImage);
+};
 
-  // возвращаем готовую карточку в цикл добавления на страницу
-  return card;
+// объект с обработчиками для карточки
+const callbacks = {
+  cardTemplate,
+  likeCard,
+  deleteCard,
+  handleImageClick
+};
+
+// функция рендеринга карточки
+const renderCard = (cardData, method = 'prepend') => {
+  const cardElement = createCard(cardData, callbacks);
+
+  // добавляем карточку c использование метода
+  cardsContainer[ method ](cardElement);
 };
 
 // инициализация начальных карточек
 initialCards.forEach(initialCard => {
-  const card = renderCard(initialCard);
-
-  // добавляем карточку в конец контейнера
-  cardsContainer.append(card);
+  renderCard(initialCard, 'append');
 });
 
 // функция редактирование профиля
@@ -111,10 +118,7 @@ const handleNewCardFormSubmit = (event) => {
   };
 
   // рендерим новую карточку
-  const card = renderCard(newCardData);
-
-  // добавляем новую карточку в начало
-  cardsContainer.prepend(card);
+  renderCard(newCardData);
 
   // закрываем попап
   closePopup(popupNewCard);
