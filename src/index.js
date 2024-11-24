@@ -15,7 +15,7 @@ import { createCard } from './scripts/card.js';
 import { deleteElement } from './scripts/deleteElement.js';
 
 // функция лайков
-import { likeCard } from './scripts/like.js';
+import { liked } from './scripts/like.js';
 
 // открытие модального окна
 import { openPopup, closePopup } from './scripts/modals.js';
@@ -71,7 +71,7 @@ const renderCard = (cardData) => {
   const card = createCard(cardData, {
     cardTemplate: cardTemplate,
     popupImage: popupImage,
-    likeCard: likeCard,
+    likeCard: liked,
     deleteCard: deleteElement,
     openPopupImage: openPopup
   });
