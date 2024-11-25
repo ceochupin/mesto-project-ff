@@ -23,15 +23,15 @@ export const createCard = (cardData, { cardTemplate, likeCard, deleteCard, handl
 
   cardImage.addEventListener('click', () => handleImageClick(cardData)); 
 
-  // возвращаем карточку
+  // возвращаем готовую карточку
   return cardElement;
 };
 
-// функция лайков
+// функция лайков на карточке
 export const likeCard = (card) => {
   const likeButton = card.querySelector('.card__like-button');
   likeButton.classList.toggle('card__like-button_is-active');
 };
 
-// функция удаления элементов
-export const deleteCard = card => card.remove();
+// функция удаления карточки
+export const deleteCard = (card) => card.remove();

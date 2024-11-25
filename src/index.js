@@ -16,7 +16,7 @@ import { openPopup, closePopup } from './scripts/modals.js';
 
 
 /**********************************\
-* ПЕРЕМЕННЫЕ
+* DOM ЭЛЕМЕНТЫ
 \**********************************/
 
 // шаблон карточек
@@ -67,33 +67,12 @@ const modals = document.querySelectorAll('.popup');
 \**********************************/
 
 // обработчик клика на картинку
-const handleImageClick = cardData => {
+const handleImageClick = (cardData) => {
   imageInPopup.src = cardData.link;
   imageInPopup.alt = cardData.name;
   captionInPopup.textContent = cardData.name;
   openPopup(popupImage);
 };
-
-// объект с обработчиками для карточки
-const callbacks = {
-  cardTemplate,
-  likeCard,
-  deleteCard,
-  handleImageClick
-};
-
-// функция рендеринга карточки
-const renderCard = (cardData, method = 'prepend') => {
-  const cardElement = createCard(cardData, callbacks);
-
-  // добавляем карточку c использование метода
-  cardsContainer[ method ](cardElement);
-};
-
-// инициализация начальных карточек
-initialCards.forEach(initialCard => {
-  renderCard(initialCard, 'append');
-});
 
 // функция редактирование профиля
 const handleProfileFormSubmit = (event) => {
@@ -127,31 +106,54 @@ const handleNewCardFormSubmit = (event) => {
   addCardForm.reset();
 };
 
+// объект с обработчиками для карточки
+const callbacks = {
+  cardTemplate,
+  likeCard,
+  deleteCard,
+  handleImageClick
+};
+
+// функция рендеринга карточки
+const renderCard = (cardData, method = 'prepend') => {
+  const cardElement = createCard(cardData, callbacks);
+
+  // добавляем карточку c использование метода
+  cardsContainer[ method ](cardElement);
+};
+
+// cлушатель клика на кнопку редактирования профиля
+editProfileButton.addEventListener('click', () => {
+
+  // заполняем форму данными профиля
+  editProfileForm.name.value = profileTitle.textContent;
+  editProfileForm.description.value = profileDescription.textContent;
+
+  // открываем попап
+  openPopup(popupEditProfile);
+});
+
+// cлушатель клика на кнопку добавления карточки
+addNewCardButton.addEventListener('click', () => openPopup(popupNewCard));
+
 // слушатели события отправки форм
 editProfileForm.addEventListener('submit', handleProfileFormSubmit);
 addCardForm.addEventListener('submit', handleNewCardFormSubmit);
 
-// функция установки слушателей на кнопки профиля и добавления карточки
-const setupEventListeners = () => {
-
-  // cлушатель клика на кнопку редактирования профиля
-  editProfileButton.addEventListener('click', () => {
-
-    // заполняем форму данными профиля
-    editProfileForm.name.value = profileTitle.textContent;
-    editProfileForm.description.value = profileDescription.textContent;
-
-    // открываем попап
-    openPopup(popupEditProfile);
-  });
-
-  // cлушатель клика на кнопку добавления карточки
-  addNewCardButton.addEventListener('click', () => openPopup(popupNewCard));
-};
-
-setupEventListeners();
-
 // анимируем открытие и закрытие модалок
 modals.forEach(modal => {
   modal.classList.add('popup_is-animated');
-})
+});
+
+// инициализация начальных карточек
+initialCards.forEach(initialCard => {
+  renderCard(initialCard, 'append');
+});
+
+
+
+
+
+
+
+
