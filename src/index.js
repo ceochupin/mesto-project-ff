@@ -58,9 +58,6 @@ const imageInPopup = popupImage.querySelector('.popup__image');
 // описание для картинки в попапе
 const captionInPopup = popupImage.querySelector('.popup__caption');
 
-// все модальные окна
-const modals = document.querySelectorAll('.popup');
-
 
 /**********************************\
 * ЛОГИКА РАБОТЫ ПРИЛОЖЕНИЯ
@@ -139,9 +136,6 @@ addNewCardButton.addEventListener('click', () => openPopup(popupNewCard));
 // слушатели события отправки форм
 editProfileForm.addEventListener('submit', handleProfileFormSubmit);
 addCardForm.addEventListener('submit', handleNewCardFormSubmit);
-
-// анимируем открытие и закрытие модалок
-modals.forEach(modal => modal.classList.add('popup_is-animated'));
 
 // инициализация начальных карточек
 initialCards.forEach(initialCard => renderCard(initialCard, 'append'));
