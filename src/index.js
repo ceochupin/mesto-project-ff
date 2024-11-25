@@ -114,7 +114,7 @@ const callbacks = {
   handleImageClick
 };
 
-// функция рендеринга карточки
+// функция рендеринга любой карточки
 const renderCard = (cardData, method = 'prepend') => {
   const cardElement = createCard(cardData, callbacks);
 

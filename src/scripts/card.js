@@ -1,4 +1,4 @@
-// функция создания карточек
+// функция создания карточки
 export const createCard = (
   cardData,
   {
@@ -29,7 +29,8 @@ export const createCard = (
   // добавляем слушатель клика на кнопку лайка
   cardLikeButton.addEventListener('click', () => handleLikeCard(cardLikeButton));
 
-  cardImage.addEventListener('click', () => handleImageClick(cardData)); 
+  // добавляем слушатель клика на картинку
+  cardImage.addEventListener('click', () => handleImageClick(cardData));
 
   // возвращаем готовую карточку
   return cardElement;
