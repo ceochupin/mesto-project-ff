@@ -1,5 +1,13 @@
 // функция создания карточек
-export const createCard = (cardData, { cardTemplate, likeCard, deleteCard, handleImageClick }) => {
+export const createCard = (
+  cardData,
+  {
+    cardTemplate,
+    handleLikeCard,
+    handleDeleteCard,
+    handleImageClick 
+  }
+) => {
 
   // клонируем шаблон
   const cardElement = cardTemplate.content.querySelector('.card').cloneNode(true);
@@ -16,10 +24,10 @@ export const createCard = (cardData, { cardTemplate, likeCard, deleteCard, handl
   cardTitle.textContent = cardData.name;
 
   // добавляем слушатель клика на кнопку удаления карточки
-  cardDeleteButton.addEventListener('click', () => deleteCard(cardElement));
+  cardDeleteButton.addEventListener('click', () => handleDeleteCard(cardElement));
 
   // добавляем слушатель клика на кнопку лайка
-  cardLikeButton.addEventListener('click', () => likeCard(cardElement));
+  cardLikeButton.addEventListener('click', () => handleLikeCard(cardLikeButton));
 
   cardImage.addEventListener('click', () => handleImageClick(cardData)); 
 
@@ -28,10 +36,7 @@ export const createCard = (cardData, { cardTemplate, likeCard, deleteCard, handl
 };
 
 // функция лайков на карточке
-export const likeCard = (card) => {
-  const likeButton = card.querySelector('.card__like-button');
-  likeButton.classList.toggle('card__like-button_is-active');
-};
+export const handleLikeCard = (button) => button.classList.toggle('card__like-button_is-active');
 
 // функция удаления карточки
-export const deleteCard = (card) => card.remove();
+export const handleDeleteCard = (card) => card.remove();

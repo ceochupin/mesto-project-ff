@@ -9,7 +9,7 @@ import './pages/index.css';
 import { initialCards } from './scripts/initialCards.js';
 
 // функции создания карточек, лайков и удаления
-import { createCard, likeCard, deleteCard } from './scripts/card.js';
+import { createCard, handleLikeCard, handleDeleteCard } from './scripts/card.js';
 
 // открытие и закрытие модального окна
 import { openPopup, closePopup } from './scripts/modals.js';
@@ -109,8 +109,8 @@ const handleNewCardFormSubmit = (event) => {
 // объект с обработчиками для карточки
 const callbacks = {
   cardTemplate,
-  likeCard,
-  deleteCard,
+  handleLikeCard,
+  handleDeleteCard,
   handleImageClick
 };
 
@@ -141,19 +141,7 @@ editProfileForm.addEventListener('submit', handleProfileFormSubmit);
 addCardForm.addEventListener('submit', handleNewCardFormSubmit);
 
 // анимируем открытие и закрытие модалок
-modals.forEach(modal => {
-  modal.classList.add('popup_is-animated');
-});
+modals.forEach(modal => modal.classList.add('popup_is-animated'));
 
 // инициализация начальных карточек
-initialCards.forEach(initialCard => {
-  renderCard(initialCard, 'append');
-});
-
-
-
-
-
-
-
-
+initialCards.forEach(initialCard => renderCard(initialCard, 'append'));
