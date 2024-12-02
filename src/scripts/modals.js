@@ -18,8 +18,9 @@ export const closePopup = (popup) => {
 // обработчик Esc
 const handleEscapeKey = (event) => {
   if (event.key === 'Escape') {
-    const openedPopup = document.querySelector('.popup_is-opened');
-    if (openedPopup) closePopup(openedPopup);
+    const openedPopups = document.querySelectorAll('.popup_is-opened');
+
+    openedPopups.forEach((openedPopup) => closePopup(openedPopup));
   };
 };
 
