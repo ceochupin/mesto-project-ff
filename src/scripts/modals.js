@@ -1,7 +1,11 @@
 // открытие модального окна
-export const openPopup = (popup) => {
+export const openPopup = (popup, classVisible = 'popup_is-opened') => {
+  // проверяем, что модальное окно не открыто
+  const openedPopupCheck = document.querySelector(`.${classVisible}`);
+  if (openedPopupCheck) return;
+
   // показываем модальное окно
-  popup.classList.add('popup_is-opened');
+  popup.classList.add(classVisible);
 
   // добавляем обработчики нажатия Esc и клика на оверлей или кнопку закрытия
   document.addEventListener('keydown', handleEscapeKey);
@@ -9,8 +13,8 @@ export const openPopup = (popup) => {
 };
 
 // закрытие модального окна
-export const closePopup = (popup) => {
-  popup.classList.remove('popup_is-opened');
+export const closePopup = (popup, classVisible = 'popup_is-opened') => {
+  popup.classList.remove(classVisible);
   document.removeEventListener('keydown', handleEscapeKey);
   popup.removeEventListener('click', handleOverlayAndCloseButtonClick);
 };
@@ -18,9 +22,8 @@ export const closePopup = (popup) => {
 // обработчик Esc
 const handleEscapeKey = (event) => {
   if (event.key === 'Escape') {
-    const openedPopups = document.querySelectorAll('.popup_is-opened');
-
-    openedPopups.forEach((openedPopup) => closePopup(openedPopup));
+    const openedPopup = document.querySelector('.popup_is-opened');
+    closePopup(openedPopup);
   };
 };
 
