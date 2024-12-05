@@ -64,10 +64,10 @@ const captionInPopup = popupImage.querySelector('.popup__caption');
 \**********************************/
 
 // обработчик клика на картинку
-const handleImageClick = (cardData) => {
-  imageInPopup.src = cardData.link;
-  imageInPopup.alt = cardData.name;
-  captionInPopup.textContent = cardData.name;
+const handleImageClick = ( { name, link } ) => {
+  imageInPopup.src = link;
+  imageInPopup.alt = name;
+  captionInPopup.textContent = name;
   openPopup(popupImage);
 };
 

@@ -1,6 +1,9 @@
 // функция создания карточки
 export const createCard = (
-  cardData,
+  {
+    name,
+    link 
+  },
   {
     cardTemplate,
     handleLikeCard,
@@ -19,9 +22,9 @@ export const createCard = (
   const cardLikeButton = cardElement.querySelector('.card__like-button');
 
   // заполняем данные
-  cardImage.src = cardData.link;
-  cardImage.alt = cardData.name;
-  cardTitle.textContent = cardData.name;
+  cardImage.src = link;
+  cardImage.alt = name;
+  cardTitle.textContent = name;
 
   // добавляем слушатель клика на кнопку удаления карточки
   cardDeleteButton.addEventListener('click', () => handleDeleteCard(cardElement));
@@ -30,7 +33,7 @@ export const createCard = (
   cardLikeButton.addEventListener('click', () => handleLikeCard(cardLikeButton));
 
   // добавляем слушатель клика на картинку
-  cardImage.addEventListener('click', () => handleImageClick(cardData));
+  cardImage.addEventListener('click', () => handleImageClick( { name, link } ));
 
   // возвращаем готовую карточку
   return cardElement;
