@@ -7,15 +7,15 @@
 
 .profile {
   font-family: Inter, Arial, sans-serif;
-  color: #ffffff;
+  color: rgb(255 255 255);
   display: flex;
   align-items: center;
-  padding: 36px 0;
+  padding-block: 36px;
 }
 
 @media screen and (width <= 480px) {
   .profile {
-    padding: 43px 0;
+    padding-block: 43px;
     flex-direction: column;
     text-align: center;
   }

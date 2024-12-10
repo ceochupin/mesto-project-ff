@@ -1,19 +1,21 @@
 .popup__content {
-  max-width: 430px;
-  width: 100%;
-  min-height: 330px;
-  background-color: #ffffff;
+  max-inline-size: 430px;
+  inline-size: 100%;
+  min-block-size: 330px;
+  background: rgb(255 255 255);
   border-radius: 10px;
   position: relative;
   box-sizing: border-box;
-  padding: 34px 36px;
+  padding-block: 34px;
+  padding-inline: 36px;
 }
 
 @media screen and (width <= 568px) {
   .popup__content {
-    width: 100%;
-    max-width: calc(100% - 80px);
-    margin-top: 40px;
-    padding: 30px 20px;
+    inline-size: 100%;
+    max-inline-size: calc(100% - 80px);
+    margin-block-start: 40px;
+    padding-block: 30px;
+    padding-inline: 20px;
   }
 }

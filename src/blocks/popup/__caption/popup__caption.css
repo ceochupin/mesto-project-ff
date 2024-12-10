@@ -1,9 +1,9 @@
 .popup__caption {
   font-size: 12px;
-  line-height: 15px;
-  color: #ffffff;
+  line-height: 1.25;
+  color: rgb(255 255 255);
   position: absolute;
-  left: 0;
-  top: calc(100% + 10px);
+  inset-inline-start: 0;
+  inset-block-start: calc(100% + 10px);
   margin: 0;
 }
