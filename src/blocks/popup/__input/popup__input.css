@@ -13,11 +13,8 @@
 }
 
 .popup__input:focus-visible {
-  border-block-end: 1px solid rgb(0 0 0);
-}
-
-.popup__input:invalid {
-  border-block-end: 1px solid rgb(255 0 0);
+  outline: 1px solid rgb(0 0 0 / 0.2);
+  outline-offset: 1px;
 }
 
 @media screen and (width <= 568px) {

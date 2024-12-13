@@ -42,7 +42,7 @@
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Редактировать профиль</h3>
-          <form class="popup__form" name="edit-profile">
+          <form class="popup__form" name="edit-profile" novalidate>
             <label class="popup__label">
               <input
                 type="text"
@@ -52,10 +52,12 @@
                 minlength="2"
                 maxlength="40"
                 pattern="^[A-Za-zА-Яа-яЁё\s\-]+$"
+                data-error-text="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+                id="edit-profile-name-input"
                 required
               />
 
-              <span class="popup__error popup__error_type_name"></span>
+              <span class="popup__error edit-profile-name-input-error"></span>
             </label>
 
             <label class="popup__label">
@@ -67,10 +69,12 @@
                 minlength="2"
                 maxlength="200"
                 pattern="^[A-Za-zА-Яа-яЁё\s\-]+$"
+                data-error-text="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+                id="edit-profile-description-input"
                 required
               />
 
-              <span class="popup__error popup__error_type_description"></span>
+              <span class="popup__error edit-profile-description-input-error"></span>
             </label>
             
             <button type="submit" class="button popup__button">
@@ -83,7 +87,7 @@
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Новое место</h3>
-          <form class="popup__form" name="new-place">
+          <form class="popup__form" name="new-place" novalidate>
             <label class="popup__label">
               <input
                 type="text"
@@ -93,10 +97,12 @@
                 minlength="2"
                 maxlength="30"
                 pattern="^[A-Za-zА-Яа-яЁё\s\-]+$"
+                data-error-text="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+                id="new-place-name-input"
                 required
               />
 
-              <span class="popup__error popup__error_type_card-name"></span>
+              <span class="popup__error new-place-name-input-error"></span>
             </label>
 
             <label class="popup__label">
@@ -105,10 +111,11 @@
                 name="link"
                 class="popup__input popup__input_type_url"
                 placeholder="Ссылка на картинку"
+                id="new-place-url-input"
                 required
               />
 
-              <span class="popup__error popup__error_type_url"></span>
+              <span class="popup__error new-place-url-input-error"></span>
             </label>
             
             <button type="submit" class="button popup__button">

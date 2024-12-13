@@ -14,6 +14,9 @@ import { createCard, handleLikeCard, handleDeleteCard } from './scripts/card.js'
 // открытие и закрытие модального окна
 import { openPopup, closePopup } from './scripts/modals.js';
 
+// валидация и очистка фалидации форм
+import { enableValidation, clearValidation } from './scripts/validation.js';
+
 
 /**********************************\
 * DOM ЭЛЕМЕНТЫ
@@ -58,6 +61,14 @@ const imageInPopup = popupImage.querySelector('.popup__image');
 // описание для картинки в попапе
 const captionInPopup = popupImage.querySelector('.popup__caption');
 
+// объект с конфигурацией валидации форм
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error',
+}
 
 /**********************************\
 * ЛОГИКА РАБОТЫ ПРИЛОЖЕНИЯ
@@ -83,6 +94,9 @@ const handleProfileFormSubmit = (event) => {
   closePopup(popupEditProfile);
 };
 
+// слушатель сабмита формы редактирования профиля
+editProfileForm.addEventListener('submit', handleProfileFormSubmit);
+
 // функция добавления новой карточки
 const handleNewCardFormSubmit = (event) => {
   event.preventDefault();
@@ -102,6 +116,9 @@ const handleNewCardFormSubmit = (event) => {
   // очищаем форму
   addCardForm.reset();
 };
+
+// слушатель сабмита формы новой карточки
+addCardForm.addEventListener('submit', handleNewCardFormSubmit);
 
 // объект с обработчиками для карточки
 const callbacks = {
@@ -126,16 +143,27 @@ editProfileButton.addEventListener('click', () => {
   editProfileForm.name.value = profileTitle.textContent;
   editProfileForm.description.value = profileDescription.textContent;
 
+  // очищаем валидацию
+  clearValidation(editProfileForm, validationConfig);
+
   // открываем попап
   openPopup(popupEditProfile);
 });
 
 // cлушатель клика на кнопку добавления карточки
-addNewCardButton.addEventListener('click', () => openPopup(popupNewCard));
+addNewCardButton.addEventListener('click', () => {
 
-// слушатели события отправки форм
-editProfileForm.addEventListener('submit', handleProfileFormSubmit);
-addCardForm.addEventListener('submit', handleNewCardFormSubmit);
+  // очищаем форму
+  addCardForm.reset();
+
+  // очищаем валидацию
+  clearValidation(addCardForm, validationConfig);
+
+  // открываем попап
+  openPopup(popupNewCard);
+});
 
 // инициализация начальных карточек
 initialCards.forEach(initialCard => renderCard(initialCard, 'append'));
+
+enableValidation(validationConfig);
