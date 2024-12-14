@@ -1,67 +1,48 @@
-// /**********************************\
-// * ИМПОРТЫ
-// \**********************************/
+/**********************************\
+* ИМПОРТЫ
+\**********************************/
 
-// Стили проекта
 import './pages/index.css';
-
-// массив с данными для карточек
-import { initialCards } from './scripts/initialCards.js';
-
-// функции создания карточек, лайков и удаления
+import { getInitialCards, getUserInfo } from './scripts/api.js';
 import { createCard, handleLikeCard, handleDeleteCard } from './scripts/card.js';
-
-// открытие и закрытие модального окна
 import { openPopup, closePopup } from './scripts/modals.js';
-
-// валидация и очистка фалидации форм
 import { enableValidation, clearValidation } from './scripts/validation.js';
-
 
 /**********************************\
 * DOM ЭЛЕМЕНТЫ
 \**********************************/
 
-// шаблон карточек
-const cardTemplate = document.querySelector('#card-template');
+export const cardTemplate = document.querySelector('#card-template');
 
-// контейнер для добавления карточек
 const cardsContainer = document.querySelector('.places__list');
 
-// кнопка редактирования профиля
-const editProfileButton = document.querySelector('.profile__edit-button');
+const avatarEdit = {
+  button: document.querySelector('.profile__edit-avatar-button'),
+  image: document.querySelector('.profile__image'),
+  popup: document.querySelector('.popup_type_edit-avatar'),
+  form: document.forms['edit-avatar'],
+}
 
-// попап редактирования профиля
-const popupEditProfile = document.querySelector('.popup_type_edit');
+const profileEdit = {
+  button: document.querySelector('.profile__edit-button'),
+  popup: document.querySelector('.popup_type_edit'),
+  title: document.querySelector('.profile__title'),
+  description: document.querySelector('.profile__description'),
+  form: document.forms['edit-profile'],
+}
 
-// заголовок профиля
-const profileTitle = document.querySelector('.profile__title');
+const newCardAdd = {
+  button: document.querySelector('.profile__add-button'),
+  popup: document.querySelector('.popup_type_new-card'),
+  form: document.forms['new-place'],
+}
 
-// описание профиля
-const profileDescription = document.querySelector('.profile__description');
+const fullImageCard = {
+  popup: document.querySelector('.popup_type_image'),
+  image: document.querySelector('.popup__image'),
+  caption: document.querySelector('.popup__caption'),
+}
 
-// форма редакитрования профиля
-const editProfileForm = document.forms['edit-profile'];
-
-// кнопка добавления пользовательской карточки
-const addNewCardButton = document.querySelector('.profile__add-button');
-
-// попап добавления новой карточки
-const popupNewCard = document.querySelector('.popup_type_new-card');
-
-// форма добавления новой карточки
-const addCardForm = document.forms['new-place'];
-
-// попап для картинки на весь экран
-const popupImage = document.querySelector('.popup_type_image');
-
-// картинка в попапе
-const imageInPopup = popupImage.querySelector('.popup__image');
-
-// описание для картинки в попапе
-const captionInPopup = popupImage.querySelector('.popup__caption');
-
-// объект с конфигурацией валидации форм
 const validationConfig = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
@@ -74,96 +55,85 @@ const validationConfig = {
 * ЛОГИКА РАБОТЫ ПРИЛОЖЕНИЯ
 \**********************************/
 
-// обработчик клика на картинку
-const handleImageClick = ( { name, link } ) => {
-  imageInPopup.src = link;
-  imageInPopup.alt = name;
-  captionInPopup.textContent = name;
-  openPopup(popupImage);
+const handleAvatarFormSubmit = (event) => {
+  event.preventDefault();
+  avatarEdit.image.src = avatarEdit.form.link.value;
+  closePopup(avatarEdit.popup);
 };
 
-// функция редактирование профиля
 const handleProfileFormSubmit = (event) => {
   event.preventDefault();
-
-  // принимаем новые значения
-  profileTitle.textContent = editProfileForm.name.value;
-  profileDescription.textContent = editProfileForm.description.value;
-  
-  // закрываем попап
-  closePopup(popupEditProfile);
+  profileEdit.title.textContent = profileEdit.form.name.value;
+  profileEdit.description.textContent = profileEdit.form.description.value;
+  closePopup(profileEdit.popup);
 };
 
-// слушатель сабмита формы редактирования профиля
-editProfileForm.addEventListener('submit', handleProfileFormSubmit);
-
-// функция добавления новой карточки
 const handleNewCardFormSubmit = (event) => {
   event.preventDefault();
-
-  // формируем объект с данными для новой карточки
   const newCardData = {
-    name: addCardForm['place-name'].value,
-    link: addCardForm.link.value
+    name: newCardAdd.form['place-name'].value,
+    link: newCardAdd.form.link.value
   };
-
-  // рендерим новую карточку
   renderCard(newCardData);
-
-  // закрываем попап
-  closePopup(popupNewCard);
-
-  // очищаем форму
-  addCardForm.reset();
+  closePopup(newCardAdd.popup);
 };
 
-// слушатель сабмита формы новой карточки
-addCardForm.addEventListener('submit', handleNewCardFormSubmit);
+const handleImageClick = ( { name, link } ) => {
+  fullImageCard.image.src = link;
+  fullImageCard.image.alt = name;
+  fullImageCard.caption.textContent = name;
+  openPopup(fullImageCard.popup);
+};
 
-// объект с обработчиками для карточки
 const callbacks = {
-  cardTemplate,
   handleLikeCard,
   handleDeleteCard,
   handleImageClick
 };
 
-// функция рендеринга любой карточки
 const renderCard = (cardData, method = 'prepend') => {
   const cardElement = createCard(cardData, callbacks);
-
-  // добавляем карточку c использование метода
   cardsContainer[ method ](cardElement);
 };
 
-// cлушатель клика на кнопку редактирования профиля
-editProfileButton.addEventListener('click', () => {
+avatarEdit.form.addEventListener('submit', handleAvatarFormSubmit);
+profileEdit.form.addEventListener('submit', handleProfileFormSubmit);
+newCardAdd.form.addEventListener('submit', handleNewCardFormSubmit);
 
-  // заполняем форму данными профиля
-  editProfileForm.name.value = profileTitle.textContent;
-  editProfileForm.description.value = profileDescription.textContent;
-
-  // очищаем валидацию
-  clearValidation(editProfileForm, validationConfig);
-
-  // открываем попап
-  openPopup(popupEditProfile);
+avatarEdit.button.addEventListener('click', () => {
+  clearValidation(avatarEdit.form, validationConfig);
+  avatarEdit.form.link.value = avatarEdit.image.src;
+  openPopup(avatarEdit.popup);
 });
 
-// cлушатель клика на кнопку добавления карточки
-addNewCardButton.addEventListener('click', () => {
-
-  // очищаем форму
-  addCardForm.reset();
-
-  // очищаем валидацию
-  clearValidation(addCardForm, validationConfig);
-
-  // открываем попап
-  openPopup(popupNewCard);
+profileEdit.button.addEventListener('click', () => {
+  clearValidation(profileEdit.form, validationConfig);
+  profileEdit.form.name.value = profileEdit.title.textContent;
+  profileEdit.form.description.value = profileEdit.description.textContent;
+  openPopup(profileEdit.popup);
 });
 
-// инициализация начальных карточек
-initialCards.forEach(initialCard => renderCard(initialCard, 'append'));
+newCardAdd.button.addEventListener('click', () => {
+  newCardAdd.form.reset();
+  clearValidation(newCardAdd.form, validationConfig);
+  openPopup(newCardAdd.popup);
+});
 
 enableValidation(validationConfig);
+
+const setUserProfile = (user) => {
+  profileEdit.title.textContent = user.name;
+  profileEdit.description.textContent = user.about;
+  avatarEdit.image.src = user.avatar;
+  avatarEdit.image.alt = `Аватар пользователя ${user.name}`;
+};
+
+Promise.all([getInitialCards(), getUserInfo()])
+  .then(([cards, user]) => {
+    cards.forEach((card) => renderCard(card));
+
+    setUserProfile(user);
+  })
+  .catch((err) => {
+    console.log(err);
+  });

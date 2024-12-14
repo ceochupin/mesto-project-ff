@@ -6,6 +6,7 @@
   font-size: 14px;
   line-height: 1.25;
   box-sizing: border-box;
+  appearance: none;
 }
 
 .popup__input:focus {
@@ -15,6 +16,10 @@
 .popup__input:focus-visible {
   outline: 1px solid rgb(0 0 0 / 0.2);
   outline-offset: 1px;
+}
+
+.popup__input::placeholder {
+  color: rgb(196 196 196);
 }
 
 @media screen and (width <= 568px) {

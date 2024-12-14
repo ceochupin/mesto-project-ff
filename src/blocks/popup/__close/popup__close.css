@@ -19,3 +19,12 @@
 .popup__close:hover {
   opacity: 0.6;
 }
+
+.popup__close:focus {
+  outline: none;
+}
+
+.popup__close:focus-visible {
+  outline: 1px solid rgb(255 255 255);
+  outline-offset: 1px;
+}

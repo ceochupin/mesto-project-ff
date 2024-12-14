@@ -1,20 +1,9 @@
 .profile__image {
-  inline-size: 120px;
-  block-size: 120px;
-  border-radius: 50%;
-  background-size: cover;
-  background-position: center;
-  margin-inline-end: 29px;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: no-repeat;
+  object-fit: cover;
+  object-position: center;
 }
 
-@media screen and (width <= 740px) {
-  .profile__image {
-    margin-inline-end: 10px;
-  }
-}
 
-@media screen and (width <= 480px) {
-  .profile__image {
-    margin-inline-end: 0;
-  }
-}
