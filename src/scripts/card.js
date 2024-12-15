@@ -1,11 +1,13 @@
 import { cardTemplate } from '../index.js';
+import { deleteCard, itLikedCard, unLikedCard } from './api.js';
 
 export const createCard = (
   {
     name,
     link,
-    likes = [],
-    _id = userId,
+    likes,
+    owner,
+    _id,
   },
   userId,
   {
@@ -26,22 +28,53 @@ export const createCard = (
   cardTitle.textContent = name;
   cardLikeCounter.textContent = likes.length;
 
-  if (userId !== _id) {
+  if (userId !== owner._id) {
     cardDeleteButton.remove();
   } else {
-    cardDeleteButton.addEventListener('click', () => handleDeleteCard(cardElement));
+    cardDeleteButton.addEventListener('click', () => {
+      handleDeleteCard({
+        card: cardElement,
+        cardId: _id
+      });
+    });
   }
 
-  if (likes.includes(userId)) {
+  if (likes.find((like) => like._id === userId)) {
     cardLikeButton.classList.add('card__like-button_is-active');
   }
 
-  cardLikeButton.addEventListener('click', () => handleLikeCard(cardLikeButton));
-  cardImage.addEventListener('click', () => handleImageClick( { name, link } ));
+  cardLikeButton.addEventListener('click', () => {
+    handleLikeCard({
+      button: cardLikeButton,
+      cardId: _id,
+      counter: cardLikeCounter
+    });
+  });
+
+  cardImage.addEventListener('click', () => {
+    handleImageClick( { name, link } );
+  });
 
   return cardElement;
 };
 
-export const handleLikeCard = (button) => button.classList.toggle('card__like-button_is-active');
+export const handleLikeCard = ( { button, cardId, counter } ) => {
+  const updateLikeCouter = (card) => counter.textContent = card.likes.length;
 
-export const handleDeleteCard = (card) => card.remove();
+  if (button.classList.contains('card__like-button_is-active')) {
+    unLikedCard(cardId)
+      .then((card) => updateLikeCouter(card))
+      .catch((err) => console.log(err))
+  } else {
+    itLikedCard(cardId)
+      .then((card) => updateLikeCouter(card))
+      .catch((err) => console.log(err))
+  }
+  button.classList.toggle('card__like-button_is-active');
+}
+
+export const handleDeleteCard = ( { card, cardId } ) => {
+  deleteCard(cardId)
+    .then(() => card.remove())
+    .catch((err) => console.log(err));
+}

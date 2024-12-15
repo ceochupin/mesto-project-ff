@@ -3,7 +3,14 @@
 \**********************************/
 
 import './pages/index.css';
-import { getInitialCards, getUserProfile } from './scripts/api.js';
+import {
+  getInitialCards,
+  getUserProfile,
+  updateUserInfo,
+  addNewCard,
+  updateUserAvatar
+} from './scripts/api.js';
+
 import { createCard, handleLikeCard, handleDeleteCard } from './scripts/card.js';
 import { openPopup, closePopup } from './scripts/modals.js';
 import { enableValidation, clearValidation } from './scripts/validation.js';
@@ -51,7 +58,7 @@ const validationConfig = {
   errorClass: 'popup__error',
 }
 
-let userId;
+let userId = '';
 
 /**********************************\
 * ЛОГИКА РАБОТЫ ПРИЛОЖЕНИЯ
@@ -66,32 +73,72 @@ const setUserInfo = ( { titleName, descriptionAbout } ) => {
   profileEdit.description.textContent = descriptionAbout;
 }
 
+const loadingButtonState = (button, isLoading) => {
+  if (isLoading) {
+    button.textContent = 'Сохранение...';
+  } else {
+    button.textContent = 'Сохранить';
+  }
+}
+
 const handleAvatarFormSubmit = (event) => {
   event.preventDefault();
-  setUserAvatar({
-    altName: profileEdit.title.textContent,
-    imageUrl: avatarEdit.form.link.value
-  });
-  closePopup(avatarEdit.popup);
+
+  loadingButtonState(avatarEdit.form.button, true);
+
+  const userAvatar = avatarEdit.form.link.value;
+
+  updateUserAvatar(userAvatar)
+    .then((user) => {
+      setUserAvatar({
+        altName: profileEdit.title.textContent,
+        imageUrl: user.avatar
+      });
+      closePopup(avatarEdit.popup);
+    })
+    .catch((error) => console.log(error))
+    .finally(() => loadingButtonState(avatarEdit.form.button, false));
 };
 
 const handleProfileFormSubmit = (event) => {
   event.preventDefault();
-  setUserInfo({
+
+  loadingButtonState(profileEdit.form.button, true);
+
+  const userInfo = {
     titleName: profileEdit.form.name.value,
-    descriptionAbout: profileEdit.form.description.value
-  });
-  closePopup(profileEdit.popup);
+    descriptionAbout: profileEdit.form.description.value 
+  }
+
+  updateUserInfo(userInfo)
+    .then((user) => {
+      setUserInfo({
+        titleName: user.name,
+        descriptionAbout: user.about
+      });
+      closePopup(profileEdit.popup);
+    })
+    .catch((error) => console.log(error))
+    .finally(() => loadingButtonState(profileEdit.form.button, false));
 };
 
 const handleNewCardFormSubmit = (event) => {
   event.preventDefault();
+
+  loadingButtonState(newCardAdd.form.button, true);
+
   const newCardData = {
     name: newCardAdd.form['place-name'].value,
     link: newCardAdd.form.link.value
   };
-  renderCard( { cardData: newCardData } );
-  closePopup(newCardAdd.popup);
+
+  addNewCard(newCardData)
+    .then((cardData) => {
+      renderCard({ cardData });
+      closePopup(newCardAdd.popup);
+    })
+    .catch((error) => console.log(error))
+    .finally(() => loadingButtonState(newCardAdd.form.button, false));
 };
 
 const handleImageClick = ( { name, link } ) => {
@@ -139,8 +186,8 @@ enableValidation(validationConfig);
 
 Promise.all([getInitialCards(), getUserProfile()])
   .then(([cards, user]) => {
-    userId = user._id;
     console.log({cards});
+    userId = user._id;
 
     cards.forEach((card) => {
       renderCard({
@@ -159,6 +206,4 @@ Promise.all([getInitialCards(), getUserProfile()])
       descriptionAbout: user.about
     });
   })
-  .catch((err) => {
-    console.log(err);
-  });
+  .catch((err) => console.log(err));
