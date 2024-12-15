@@ -19,7 +19,7 @@ export const getInitialCards = () => {
     });
 }
 
-export const getUserInfo = () => {
+export const getUserProfile = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
   })

@@ -3,7 +3,7 @@
 \**********************************/
 
 import './pages/index.css';
-import { getInitialCards, getUserInfo } from './scripts/api.js';
+import { getInitialCards, getUserProfile } from './scripts/api.js';
 import { createCard, handleLikeCard, handleDeleteCard } from './scripts/card.js';
 import { openPopup, closePopup } from './scripts/modals.js';
 import { enableValidation, clearValidation } from './scripts/validation.js';
@@ -51,20 +51,36 @@ const validationConfig = {
   errorClass: 'popup__error',
 }
 
+let userId;
+
 /**********************************\
 * ЛОГИКА РАБОТЫ ПРИЛОЖЕНИЯ
 \**********************************/
 
+const setUserAvatar = ( { altName, imageUrl } ) => {
+  avatarEdit.image.src = imageUrl;
+  avatarEdit.image.alt = `Аватар пользователя ${altName}`;
+}
+const setUserInfo = ( { titleName, descriptionAbout } ) => {
+  profileEdit.title.textContent = titleName;
+  profileEdit.description.textContent = descriptionAbout;
+}
+
 const handleAvatarFormSubmit = (event) => {
   event.preventDefault();
-  avatarEdit.image.src = avatarEdit.form.link.value;
+  setUserAvatar({
+    altName: profileEdit.title.textContent,
+    imageUrl: avatarEdit.form.link.value
+  });
   closePopup(avatarEdit.popup);
 };
 
 const handleProfileFormSubmit = (event) => {
   event.preventDefault();
-  profileEdit.title.textContent = profileEdit.form.name.value;
-  profileEdit.description.textContent = profileEdit.form.description.value;
+  setUserInfo({
+    titleName: profileEdit.form.name.value,
+    descriptionAbout: profileEdit.form.description.value
+  });
   closePopup(profileEdit.popup);
 };
 
@@ -74,7 +90,7 @@ const handleNewCardFormSubmit = (event) => {
     name: newCardAdd.form['place-name'].value,
     link: newCardAdd.form.link.value
   };
-  renderCard(newCardData);
+  renderCard( { cardData: newCardData } );
   closePopup(newCardAdd.popup);
 };
 
@@ -91,8 +107,8 @@ const callbacks = {
   handleImageClick
 };
 
-const renderCard = (cardData, method = 'prepend') => {
-  const cardElement = createCard(cardData, callbacks);
+const renderCard = ( { cardData, method = 'prepend'} ) => {
+  const cardElement = createCard(cardData, userId, callbacks);
   cardsContainer[ method ](cardElement);
 };
 
@@ -121,18 +137,27 @@ newCardAdd.button.addEventListener('click', () => {
 
 enableValidation(validationConfig);
 
-const setUserProfile = (user) => {
-  profileEdit.title.textContent = user.name;
-  profileEdit.description.textContent = user.about;
-  avatarEdit.image.src = user.avatar;
-  avatarEdit.image.alt = `Аватар пользователя ${user.name}`;
-};
-
-Promise.all([getInitialCards(), getUserInfo()])
+Promise.all([getInitialCards(), getUserProfile()])
   .then(([cards, user]) => {
-    cards.forEach((card) => renderCard(card));
+    userId = user._id;
+    console.log({cards});
 
-    setUserProfile(user);
+    cards.forEach((card) => {
+      renderCard({
+        cardData: card,
+        method: 'append'
+      });
+    });
+
+    setUserAvatar({
+      altName: user.name,
+      imageUrl: user.avatar
+    });
+
+    setUserInfo({
+      titleName: user.name,
+      descriptionAbout: user.about
+    });
   })
   .catch((err) => {
     console.log(err);

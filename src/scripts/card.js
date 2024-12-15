@@ -4,7 +4,10 @@ export const createCard = (
   {
     name,
     link,
+    likes = [],
+    _id = userId,
   },
+  userId,
   {
     handleLikeCard,
     handleDeleteCard,
@@ -16,12 +19,23 @@ export const createCard = (
   const cardTitle = cardElement.querySelector('.card__title');
   const cardDeleteButton = cardElement.querySelector('.card__delete-button');
   const cardLikeButton = cardElement.querySelector('.card__like-button');
+  const cardLikeCounter = cardElement.querySelector('.card__like-counter');
 
   cardImage.src = link;
   cardImage.alt = name;
   cardTitle.textContent = name;
+  cardLikeCounter.textContent = likes.length;
 
-  cardDeleteButton.addEventListener('click', () => handleDeleteCard(cardElement));
+  if (userId !== _id) {
+    cardDeleteButton.remove();
+  } else {
+    cardDeleteButton.addEventListener('click', () => handleDeleteCard(cardElement));
+  }
+
+  if (likes.includes(userId)) {
+    cardLikeButton.classList.add('card__like-button_is-active');
+  }
+
   cardLikeButton.addEventListener('click', () => handleLikeCard(cardLikeButton));
   cardImage.addEventListener('click', () => handleImageClick( { name, link } ));
 
