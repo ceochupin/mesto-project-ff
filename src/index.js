@@ -186,7 +186,6 @@ enableValidation(validationConfig);
 
 Promise.all([getInitialCards(), getUserProfile()])
   .then(([cards, user]) => {
-    console.log({cards});
     userId = user._id;
 
     cards.forEach((card) => {
