@@ -1,0 +1,20 @@
+@import url('./__profile/skeleton__profile_avatar.css');
+@import url('./__profile/skeleton__profile_description.css');
+@import url('./__profile/skeleton__profile_title.css');
+@import url('./__card/skeleton__card.css');
+@import url('./__card/skeleton__card_like-counter.css');
+@import url('./__card/skeleton__card_like-container.css');
+@import url('./__card/skeleton__card_like-button.css');
+@import url('./__card/skeleton__card_image.css');
+@import url('./__card/skeleton__card_title.css');
+@import url('./__card/skeleton__card_description.css');
+
+.skeleton {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.2; }
+  50% { opacity: 0.3; }
+  100% { opacity: 0.2; }
+}

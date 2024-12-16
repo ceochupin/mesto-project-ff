@@ -1,19 +1,11 @@
 .profile__description {
   font-size: 18px;
   line-height: 1.22;
-  grid-area: description;
   margin: 0;
 }
 
 @media screen and (width <= 568px) {
   .profile__description {
     font-size: 14px;
-  }
-}
-
-@media screen and (width <= 480px) {
-  .profile__description {
-    inline-size: 100%;
-    margin-block-start: 7px;
   }
 }

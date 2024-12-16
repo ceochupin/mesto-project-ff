@@ -1,0 +1,8 @@
+.skeleton__profile_avatar {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  background: #a1a1a1;
+  display: none;
+}

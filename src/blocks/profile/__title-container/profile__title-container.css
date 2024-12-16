@@ -1,0 +1,10 @@
+.profile__title-container {
+  overflow: hidden;
+  grid-area: title;
+}
+
+@media screen and (width <= 480px) {
+  .profile__title-container {
+    min-inline-size: 201px;
+  }
+}

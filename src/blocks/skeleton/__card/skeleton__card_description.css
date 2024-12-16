@@ -1,0 +1,8 @@
+.skeleton__card_description {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgb(255 255 255);
+  padding-block: 22px;
+  padding-inline: 20px;
+}

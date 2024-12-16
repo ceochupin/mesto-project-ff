@@ -15,26 +15,33 @@ import { createCard, handleLikeCard, handleDeleteCard } from './scripts/card.js'
 import { openPopup, closePopup } from './scripts/modals.js';
 import { enableValidation, clearValidation } from './scripts/validation.js';
 
+import { renderSkeleton } from './scripts/skeleton.js';
+
 /**********************************\
 * DOM ЭЛЕМЕНТЫ
 \**********************************/
 
+export const skeletonCardTemplate = document.querySelector('#card-template-skeleton');
+
 export const cardTemplate = document.querySelector('#card-template');
 
-const cardsContainer = document.querySelector('.places__list');
+export const cardsContainer = document.querySelector('.places__list');
 
-const avatarEdit = {
+export const avatarEdit = {
   button: document.querySelector('.profile__edit-avatar-button'),
   image: document.querySelector('.profile__image'),
+  imageSkeleton: document.querySelector('.skeleton__profile_avatar'),
   popup: document.querySelector('.popup_type_edit-avatar'),
   form: document.forms['edit-avatar'],
 }
 
-const profileEdit = {
+export const profileEdit = {
   button: document.querySelector('.profile__edit-button'),
   popup: document.querySelector('.popup_type_edit'),
   title: document.querySelector('.profile__title'),
+  titleSkeleton: document.querySelector('.skeleton__profile_title'),
   description: document.querySelector('.profile__description'),
+  descriptionSkeleton: document.querySelector('.skeleton__profile_description'),
   form: document.forms['edit-profile'],
 }
 
@@ -63,6 +70,35 @@ let userId = '';
 /**********************************\
 * ЛОГИКА РАБОТЫ ПРИЛОЖЕНИЯ
 \**********************************/
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  renderSkeleton(true);
+  
+  Promise.all([getInitialCards(), getUserProfile()])
+    .then(([cards, user]) => {
+      userId = user._id;
+
+      cards.forEach((card) => {
+        renderCard({
+          cardData: card,
+          method: 'append'
+        });
+      });
+
+      setUserAvatar({
+        altName: user.name,
+        imageUrl: user.avatar
+      });
+
+      setUserInfo({
+        titleName: user.name,
+        descriptionAbout: user.about
+      });
+    })
+    .catch((err) => console.log(err))
+    .finally(() => renderSkeleton(false));
+});
 
 const setUserAvatar = ( { altName, imageUrl } ) => {
   avatarEdit.image.src = imageUrl;
@@ -183,26 +219,3 @@ newCardAdd.button.addEventListener('click', () => {
 });
 
 enableValidation(validationConfig);
-
-Promise.all([getInitialCards(), getUserProfile()])
-  .then(([cards, user]) => {
-    userId = user._id;
-
-    cards.forEach((card) => {
-      renderCard({
-        cardData: card,
-        method: 'append'
-      });
-    });
-
-    setUserAvatar({
-      altName: user.name,
-      imageUrl: user.avatar
-    });
-
-    setUserInfo({
-      titleName: user.name,
-      descriptionAbout: user.about
-    });
-  })
-  .catch((err) => console.log(err));

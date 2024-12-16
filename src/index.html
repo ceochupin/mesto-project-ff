@@ -20,16 +20,23 @@
       </header>
       <main class="content">
         <section class="profile page__section">
-          <button class="profile__edit-avatar-button" type="button">
+          <div class="profile__edit-avatar-button">
             <img class="profile__image" src="" alt="">
-          </button>
+            <div class="skeleton skeleton__profile_avatar"></div>
+          </div>
 
           <div class="profile__info">
-            <h1 class="profile__title"></h1>
+            <div class="profile__title-container">
+              <h1 class="profile__title"></h1>
+              <div class="skeleton skeleton__profile_title"></div>
+            </div>
 
             <button class="profile__edit-button" type="button"></button>
 
-            <p class="profile__description"></p>
+            <div class="profile__description-container">
+              <p class="profile__description"></p>
+              <div class="skeleton skeleton__profile_description"></div>
+            </div>
           </div>
 
           <button class="profile__add-button" type="button"></button>
@@ -183,7 +190,23 @@
           <div class="card__like-container">
             <button type="button" class="card__like-button"></button>
             
-            <span class="card__like-counter">0</span>
+            <span class="card__like-counter"></span>
+          </div>
+        </div>
+      </li>
+    </template>
+
+    <template id="card-template-skeleton">
+      <li class="places__item skeleton skeleton__card">
+        <div class="skeleton__card_image"></div>
+
+        <div class="skeleton__card_description">
+          <div class="skeleton__card_title"></div>
+
+          <div class="skeleton__card_like-container">
+            <div type="button" class="skeleton__card_like-button"></div>
+            
+            <div class="skeleton__card_like-counter"></div>
           </div>
         </div>
       </li>

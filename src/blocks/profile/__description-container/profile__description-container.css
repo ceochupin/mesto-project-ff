@@ -1,0 +1,10 @@
+.profile__description-container {
+  grid-area: description;
+}
+
+@media screen and (width <= 480px) {
+  .profile__description-container {
+    inline-size: 100%;
+    margin-block-start: 7px;
+  }
+}

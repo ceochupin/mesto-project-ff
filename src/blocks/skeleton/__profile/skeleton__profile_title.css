@@ -1,0 +1,25 @@
+.skeleton__profile_title {
+  block-size: 49px;
+  inline-size: 70%;
+  display: none;
+  background: #a1a1a1;
+  border-radius: 5px;
+}
+
+@media screen and (width <= 740px) {
+  .skeleton__profile_title {
+    block-size: 38px;
+  }
+}
+
+@media screen and (width <= 568px) {
+  .skeleton__profile_title {
+    block-size: 33px;
+  }
+}
+
+@media screen and (width <= 480px) {
+  .skeleton__profile_title {
+    inline-size: 100%;
+  }
+}

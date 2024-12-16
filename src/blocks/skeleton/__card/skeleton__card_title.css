@@ -1,0 +1,7 @@
+.skeleton__card_title {
+  inline-size: 70%;
+  max-inline-size: 220px;
+  block-size: 29px;
+  background: #a1a1a1;
+  border-radius: 5px;
+}
