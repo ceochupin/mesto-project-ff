@@ -59,18 +59,20 @@ export const createCard = (
 };
 
 export const handleLikeCard = ( { button, cardId, counter } ) => {
-  const updateLikeCouter = (card) => counter.textContent = card.likes.length;
+  const updateLikeStateAndCouter = (card) => {
+    counter.textContent = card.likes.length;
+    button.classList.toggle('card__like-button_is-active');
+  }
 
   if (button.classList.contains('card__like-button_is-active')) {
     unLikedCard(cardId)
-      .then((card) => updateLikeCouter(card))
+      .then((card) => updateLikeStateAndCouter(card))
       .catch((err) => console.log(err))
   } else {
     itLikedCard(cardId)
-      .then((card) => updateLikeCouter(card))
+      .then((card) => updateLikeStateAndCouter(card))
       .catch((err) => console.log(err))
   }
-  button.classList.toggle('card__like-button_is-active');
 }
 
 export const handleDeleteCard = ( { card, cardId } ) => {
