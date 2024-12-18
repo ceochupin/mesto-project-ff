@@ -3,6 +3,7 @@
 \**********************************/
 
 import './pages/index.css';
+
 import {
   getInitialCards,
   getUserProfile,
@@ -17,8 +18,7 @@ import { enableValidation, clearValidation } from './scripts/validation.js';
 
 import {
   renderSkeleton,
-  setSkeletonCards,
-  deleteSkeletonCards
+  setSkeletonCards
 } from './scripts/skeleton.js';
 
 /**********************************\
@@ -31,7 +31,7 @@ export const cardTemplate = document.querySelector('#card-template');
 
 export const cardsContainer = document.querySelector('.places__list');
 
-export const avatarEdit = {
+export const userAvatar = {
   button: document.querySelector('.profile__edit-avatar-button'),
   image: document.querySelector('.profile__image'),
   imageSkeleton: document.querySelector('.skeleton__profile_avatar'),
@@ -39,7 +39,7 @@ export const avatarEdit = {
   form: document.forms['edit-avatar'],
 }
 
-export const profileEdit = {
+export const userInfo = {
   button: document.querySelector('.profile__edit-button'),
   popup: document.querySelector('.popup_type_edit'),
   title: document.querySelector('.profile__title'),
@@ -78,12 +78,12 @@ let userId = '';
 renderSkeleton(true);
 
 const setUserAvatar = ( { altName, imageUrl } ) => {
-  avatarEdit.image.src = imageUrl;
-  avatarEdit.image.alt = `Аватар пользователя ${altName}`;
+  userAvatar.image.src = imageUrl;
+  userAvatar.image.alt = `Аватар пользователя ${altName}`;
 }
 const setUserInfo = ( { titleName, descriptionAbout } ) => {
-  profileEdit.title.textContent = titleName;
-  profileEdit.description.textContent = descriptionAbout;
+  userInfo.title.textContent = titleName;
+  userInfo.description.textContent = descriptionAbout;
 }
 
 const loadingButtonState = (button, isLoading) => {
@@ -93,47 +93,47 @@ const loadingButtonState = (button, isLoading) => {
 const handleAvatarFormSubmit = (event) => {
   event.preventDefault();
 
-  loadingButtonState(avatarEdit.form.button, true);
+  loadingButtonState(userAvatar.form.button, true);
 
-  const userAvatar = avatarEdit.form.link.value;
+  const avatar = userAvatar.form.link.value;
 
-  updateUserAvatar(userAvatar)
+  updateUserAvatar(avatar)
     .then((user) => {
       setUserAvatar({
-        altName: profileEdit.title.textContent,
+        altName: userInfo.title.textContent,
         imageUrl: user.avatar
       });
-      closePopup(avatarEdit.popup);
+      closePopup(userAvatar.popup);
     })
     .catch((error) => console.log(error))
-    .finally(() => loadingButtonState(avatarEdit.form.button, false));
+    .finally(() => loadingButtonState(userAvatar.form.button, false));
 };
 
 const handleProfileFormSubmit = (event) => {
   event.preventDefault();
 
-  loadingButtonState(profileEdit.form.button, true);
+  loadingButtonState(userInfo.form.button, true);
 
-  const userInfo = {
-    titleName: profileEdit.form.name.value,
-    descriptionAbout: profileEdit.form.description.value 
+  const info = {
+    titleName: userInfo.form.name.value,
+    descriptionAbout: userInfo.form.description.value 
   }
 
-  updateUserInfo(userInfo)
+  updateUserInfo(info)
     .then((user) => {
       setUserInfo({
         titleName: user.name,
         descriptionAbout: user.about
       });
-      closePopup(profileEdit.popup);
+      closePopup(userInfo.popup);
     })
     .catch((error) => console.log(error))
-    .finally(() => loadingButtonState(profileEdit.form.button, false));
+    .finally(() => loadingButtonState(userInfo.form.button, false));
 };
 
 const handleNewCardFormSubmit = (event) => {
   event.preventDefault();
-  setSkeletonCards();
+  setSkeletonCards(true);
   loadingButtonState(newCardAdd.form.button, true);
 
   const newCardData = {
@@ -149,7 +149,7 @@ const handleNewCardFormSubmit = (event) => {
     .catch((error) => console.log(error))
     .finally(() => {
       loadingButtonState(newCardAdd.form.button, false);
-      deleteSkeletonCards();
+      setSkeletonCards(false);
     });
 };
 
@@ -171,21 +171,21 @@ const renderCard = ( { cardData, method = 'prepend'} ) => {
   cardsContainer[ method ](cardElement);
 };
 
-avatarEdit.form.addEventListener('submit', handleAvatarFormSubmit);
-profileEdit.form.addEventListener('submit', handleProfileFormSubmit);
+userAvatar.form.addEventListener('submit', handleAvatarFormSubmit);
+userInfo.form.addEventListener('submit', handleProfileFormSubmit);
 newCardAdd.form.addEventListener('submit', handleNewCardFormSubmit);
 
-avatarEdit.button.addEventListener('click', () => {
-  clearValidation(avatarEdit.form, validationConfig);
-  avatarEdit.form.link.value = avatarEdit.image.src;
-  openPopup(avatarEdit.popup);
+userAvatar.button.addEventListener('click', () => {
+  clearValidation(userAvatar.form, validationConfig);
+  userAvatar.form.link.value = userAvatar.image.src;
+  openPopup(userAvatar.popup);
 });
 
-profileEdit.button.addEventListener('click', () => {
-  clearValidation(profileEdit.form, validationConfig);
-  profileEdit.form.name.value = profileEdit.title.textContent;
-  profileEdit.form.description.value = profileEdit.description.textContent;
-  openPopup(profileEdit.popup);
+userInfo.button.addEventListener('click', () => {
+  clearValidation(userInfo.form, validationConfig);
+  userInfo.form.name.value = userInfo.title.textContent;
+  userInfo.form.description.value = userInfo.description.textContent;
+  openPopup(userInfo.popup);
 });
 
 newCardAdd.button.addEventListener('click', () => {
