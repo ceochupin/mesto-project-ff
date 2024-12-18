@@ -6,12 +6,16 @@ const config = {
   }
 };
 
-const checkResponse = (res) => {
-  if (res.ok) {
-    return res.json();
-  }
+// const checkResponse = (res) => {
+//   if (res.ok) {
+//     return res.json();
+//   }
 
-  return Promise.reject(`Ошибка: ${res.status}`);
+//   return Promise.reject(`Ошибка: ${res.status}`);
+// };
+
+const checkResponse = (res) => {
+  return (res.ok) ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
 };
 
 export const getInitialCards = () => {
@@ -60,17 +64,9 @@ export const deleteCard = (cardId) => {
     .then(checkResponse);
 };
 
-export const itLikedCard = (cardId) => {
+export const likedCard = (cardId, method = 'PUT') => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: 'PUT',
-    headers: config.headers
-  })
-    .then((res) => checkResponse(res));
-};
-
-export const unLikedCard = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: 'DELETE',
+    method: method,
     headers: config.headers
   })
     .then((res) => checkResponse(res));

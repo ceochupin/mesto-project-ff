@@ -2,12 +2,12 @@
 @import url('./__profile/skeleton__profile_description.css');
 @import url('./__profile/skeleton__profile_title.css');
 @import url('./__card/skeleton__card.css');
-@import url('./__card/skeleton__card_like-counter.css');
-@import url('./__card/skeleton__card_like-container.css');
-@import url('./__card/skeleton__card_like-button.css');
-@import url('./__card/skeleton__card_image.css');
-@import url('./__card/skeleton__card_title.css');
-@import url('./__card/skeleton__card_description.css');
+@import url('./__card/_type/skeleton__card_type_like-counter.css');
+@import url('./__card/_type/skeleton__card_type_like-container.css');
+@import url('./__card/_type/skeleton__card_type_like-button.css');
+@import url('./__card/_type/skeleton__card_type_image.css');
+@import url('./__card/_type/skeleton__card_type_title.css');
+@import url('./__card/_type/skeleton__card_type_description.css');
 
 .skeleton {
   animation: pulse 1.5s infinite;

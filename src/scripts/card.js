@@ -1,5 +1,5 @@
 import { cardTemplate } from '../index.js';
-import { deleteCard, itLikedCard, unLikedCard } from './api.js';
+import { deleteCard, likedCard } from './api.js';
 
 export const createCard = (
   {
@@ -64,15 +64,12 @@ export const handleLikeCard = ( { button, cardId, counter } ) => {
     button.classList.toggle('card__like-button_is-active');
   }
 
-  if (button.classList.contains('card__like-button_is-active')) {
-    unLikedCard(cardId)
-      .then((card) => updateLikeStateAndCouter(card))
-      .catch((err) => console.log(err))
-  } else {
-    itLikedCard(cardId)
-      .then((card) => updateLikeStateAndCouter(card))
-      .catch((err) => console.log(err))
-  }
+  (
+    button.classList.contains('card__like-button_is-active') ?
+    likedCard(cardId, 'DELETE') : likedCard(cardId)
+  )
+    .then((card) => updateLikeStateAndCouter(card))
+    .catch((err) => console.log(err))
 }
 
 export const handleDeleteCard = ( { card, cardId } ) => {

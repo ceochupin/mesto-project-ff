@@ -15,7 +15,11 @@ import { createCard, handleLikeCard, handleDeleteCard } from './scripts/card.js'
 import { openPopup, closePopup } from './scripts/modals.js';
 import { enableValidation, clearValidation } from './scripts/validation.js';
 
-import { renderSkeleton } from './scripts/skeleton.js';
+import {
+  renderSkeleton,
+  setSkeletonCards,
+  deleteSkeletonCards
+} from './scripts/skeleton.js';
 
 /**********************************\
 * DOM ЭЛЕМЕНТЫ
@@ -71,34 +75,7 @@ let userId = '';
 * ЛОГИКА РАБОТЫ ПРИЛОЖЕНИЯ
 \**********************************/
 
-document.addEventListener('DOMContentLoaded', () => {
-
-  renderSkeleton(true);
-  
-  Promise.all([getInitialCards(), getUserProfile()])
-    .then(([cards, user]) => {
-      userId = user._id;
-
-      cards.forEach((card) => {
-        renderCard({
-          cardData: card,
-          method: 'append'
-        });
-      });
-
-      setUserAvatar({
-        altName: user.name,
-        imageUrl: user.avatar
-      });
-
-      setUserInfo({
-        titleName: user.name,
-        descriptionAbout: user.about
-      });
-    })
-    .catch((err) => console.log(err))
-    .finally(() => renderSkeleton(false));
-});
+renderSkeleton(true);
 
 const setUserAvatar = ( { altName, imageUrl } ) => {
   avatarEdit.image.src = imageUrl;
@@ -110,11 +87,7 @@ const setUserInfo = ( { titleName, descriptionAbout } ) => {
 }
 
 const loadingButtonState = (button, isLoading) => {
-  if (isLoading) {
-    button.textContent = 'Сохранение...';
-  } else {
-    button.textContent = 'Сохранить';
-  }
+  button.textContent = (isLoading) ? 'Сохранение...' : 'Сохранить';
 }
 
 const handleAvatarFormSubmit = (event) => {
@@ -160,7 +133,7 @@ const handleProfileFormSubmit = (event) => {
 
 const handleNewCardFormSubmit = (event) => {
   event.preventDefault();
-
+  setSkeletonCards();
   loadingButtonState(newCardAdd.form.button, true);
 
   const newCardData = {
@@ -174,7 +147,10 @@ const handleNewCardFormSubmit = (event) => {
       closePopup(newCardAdd.popup);
     })
     .catch((error) => console.log(error))
-    .finally(() => loadingButtonState(newCardAdd.form.button, false));
+    .finally(() => {
+      loadingButtonState(newCardAdd.form.button, false);
+      deleteSkeletonCards();
+    });
 };
 
 const handleImageClick = ( { name, link } ) => {
@@ -219,3 +195,27 @@ newCardAdd.button.addEventListener('click', () => {
 });
 
 enableValidation(validationConfig);
+
+Promise.all([getInitialCards(), getUserProfile()])
+  .then(([cards, user]) => {
+    userId = user._id;
+
+    cards.forEach((card) => {
+      renderCard({
+        cardData: card,
+        method: 'append'
+      });
+    });
+
+    setUserAvatar({
+      altName: user.name,
+      imageUrl: user.avatar
+    });
+
+    setUserInfo({
+      titleName: user.name,
+      descriptionAbout: user.about
+    });
+  })
+  .catch((err) => console.log(err))
+  .finally(() => renderSkeleton(false));

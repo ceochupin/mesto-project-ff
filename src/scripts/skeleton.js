@@ -5,45 +5,31 @@ import {
   profileEdit
 } from "../index.js";
 
-const setSkeletonCards = () => {
-  for (let i = 0; i < 9; i++) {
+export const setSkeletonCards = (countCards = 1, method = 'prepend') => {
+  for (let i = 0; i < countCards; i++) {
     const card = skeletonCardTemplate.content.cloneNode(true);
-    cardsContainer.prepend(card);
+    cardsContainer[method](card);
   }
 }
 
-const deleteSkeletonCards = () => {
-  cardsContainer.querySelectorAll('.skeleton__card').forEach(card => card.remove());
+export const deleteSkeletonCards = () => {
+  cardsContainer.querySelectorAll('.skeleton').forEach(card => card.remove());
 }
 
-const setSkeletonProfile = () => {
-  avatarEdit.image.style.display = 'none';
-  avatarEdit.imageSkeleton.style.display = 'block';
+const setSkeletonProfile = (isLoading) => {
+  avatarEdit.image.style.display = (isLoading) ? 'none' : 'block';
+  avatarEdit.imageSkeleton.style.display = (isLoading) ? 'block' : 'none';
 
-  profileEdit.title.style.display = 'none';
-  profileEdit.titleSkeleton.style.display = 'block';
+  profileEdit.title.style.display = (isLoading) ? 'none' : 'block';
+  profileEdit.titleSkeleton.style.display = (isLoading) ? 'block' : 'none';
 
-  profileEdit.description.style.display = 'none';
-  profileEdit.descriptionSkeleton.style.display = 'block';
-};
-
-const deleteSkeletonProfile = () => {
-  avatarEdit.image.style.display = 'block';
-  avatarEdit.imageSkeleton.style.display = 'none';
-
-  profileEdit.title.style.display = 'block';
-  profileEdit.titleSkeleton.style.display = 'none';
-
-  profileEdit.description.style.display = 'block';
-  profileEdit.descriptionSkeleton.style.display = 'none';
+  profileEdit.description.style.display = (isLoading) ? 'none' : 'block';
+  profileEdit.descriptionSkeleton.style.display = (isLoading) ? 'block' : 'none';
 };
 
 export const renderSkeleton = (isLoading) => {
-  if (isLoading) {
-    setSkeletonCards();
-    setSkeletonProfile();
-  } else {
-    deleteSkeletonCards();
-    deleteSkeletonProfile();
-  }
+  const countCards = 9;
+
+  (isLoading) ? setSkeletonCards(countCards, 'append') : deleteSkeletonCards();
+  setSkeletonProfile(isLoading);
 }

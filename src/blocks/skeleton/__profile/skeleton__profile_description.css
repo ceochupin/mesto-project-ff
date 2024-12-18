@@ -1,7 +1,6 @@
 .skeleton__profile_description {
   block-size: 22px;
   inline-size: 70%;
-  display: none;
   background: #a1a1a1;
   border-radius: 5px;
 }
