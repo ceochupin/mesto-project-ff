@@ -33,8 +33,8 @@ export const cardsContainer = document.querySelector('.places__list');
 
 export const userAvatar = {
   button: document.querySelector('.profile__edit-avatar-button'),
-  image: document.querySelector('.profile__image'),
-  imageSkeleton: document.querySelector('.skeleton__profile_avatar'),
+  avatar: document.querySelector('.profile__image'),
+  avatarSkeleton: document.querySelector('.skeleton__profile_avatar'),
   popup: document.querySelector('.popup_type_edit-avatar'),
   form: document.forms['edit-avatar'],
 }
@@ -42,10 +42,10 @@ export const userAvatar = {
 export const userInfo = {
   button: document.querySelector('.profile__edit-button'),
   popup: document.querySelector('.popup_type_edit'),
-  title: document.querySelector('.profile__title'),
-  titleSkeleton: document.querySelector('.skeleton__profile_title'),
-  description: document.querySelector('.profile__description'),
-  descriptionSkeleton: document.querySelector('.skeleton__profile_description'),
+  name: document.querySelector('.profile__title'),
+  nameSkeleton: document.querySelector('.skeleton__profile_title'),
+  about: document.querySelector('.profile__description'),
+  aboutSkeleton: document.querySelector('.skeleton__profile_description'),
   form: document.forms['edit-profile'],
 }
 
@@ -77,13 +77,13 @@ let userId = '';
 
 renderSkeleton(true);
 
-const setUserAvatar = ( { altName, imageUrl } ) => {
-  userAvatar.image.src = imageUrl;
-  userAvatar.image.alt = `Аватар пользователя ${altName}`;
+const setUserAvatar = ( { name, avatar } ) => {
+  userAvatar.avatar.src = avatar;
+  userAvatar.avatar.alt = `Аватар пользователя ${name}`;
 }
-const setUserInfo = ( { titleName, descriptionAbout } ) => {
-  userInfo.title.textContent = titleName;
-  userInfo.description.textContent = descriptionAbout;
+const setUserInfo = ( { name, about } ) => {
+  userInfo.name.textContent = name;
+  userInfo.about.textContent = about;
 }
 
 const loadingButtonState = (button, isLoading) => {
@@ -100,8 +100,8 @@ const handleAvatarFormSubmit = (event) => {
   updateUserAvatar(avatar)
     .then((user) => {
       setUserAvatar({
-        altName: userInfo.title.textContent,
-        imageUrl: user.avatar
+        name: userInfo.name.textContent,
+        avatar: user.avatar
       });
       closePopup(userAvatar.popup);
     })
@@ -115,15 +115,15 @@ const handleProfileFormSubmit = (event) => {
   loadingButtonState(userInfo.form.button, true);
 
   const info = {
-    titleName: userInfo.form.name.value,
-    descriptionAbout: userInfo.form.description.value 
+    name: userInfo.form.name.value,
+    about: userInfo.form.about.value 
   }
 
   updateUserInfo(info)
     .then((user) => {
       setUserInfo({
-        titleName: user.name,
-        descriptionAbout: user.about
+        name: user.name,
+        about: user.about
       });
       closePopup(userInfo.popup);
     })
@@ -167,7 +167,7 @@ const callbacks = {
 };
 
 const renderCard = ( { cardData, method = 'prepend'} ) => {
-  const cardElement = createCard(cardData, userId, callbacks);
+  const cardElement = createCard(cardData, cardTemplate, userId, callbacks);
   cardsContainer[ method ](cardElement);
 };
 
@@ -177,14 +177,14 @@ newCardAdd.form.addEventListener('submit', handleNewCardFormSubmit);
 
 userAvatar.button.addEventListener('click', () => {
   clearValidation(userAvatar.form, validationConfig);
-  userAvatar.form.link.value = userAvatar.image.src;
+  userAvatar.form.link.value = userAvatar.avatar.src;
   openPopup(userAvatar.popup);
 });
 
 userInfo.button.addEventListener('click', () => {
   clearValidation(userInfo.form, validationConfig);
-  userInfo.form.name.value = userInfo.title.textContent;
-  userInfo.form.description.value = userInfo.description.textContent;
+  userInfo.form.name.value = userInfo.name.textContent;
+  userInfo.form.about.value = userInfo.about.textContent;
   openPopup(userInfo.popup);
 });
 
@@ -193,6 +193,8 @@ newCardAdd.button.addEventListener('click', () => {
   clearValidation(newCardAdd.form, validationConfig);
   openPopup(newCardAdd.popup);
 });
+
+
 
 enableValidation(validationConfig);
 
@@ -208,13 +210,13 @@ Promise.all([getInitialCards(), getUserProfile()])
     });
 
     setUserAvatar({
-      altName: user.name,
-      imageUrl: user.avatar
+      name: user.name,
+      avatar: user.avatar
     });
 
     setUserInfo({
-      titleName: user.name,
-      descriptionAbout: user.about
+      name: user.name,
+      about: user.about
     });
   })
   .catch((err) => console.log(err))

@@ -17,14 +17,13 @@ export const setSkeletonCards = (countCards = 1, method = 'prepend', isLoading) 
 }
 
 const setSkeletonProfile = (isLoading) => {
-  userAvatar.image.style.display = (isLoading) ? 'none' : 'block';
-  userAvatar.imageSkeleton.style.display = (isLoading) ? 'block' : 'none';
+  userAvatar.avatar.style.display = (isLoading) ? 'none' : 'block';
+  userInfo.name.style.display = (isLoading) ? 'none' : 'block';
+  userInfo.about.style.display = (isLoading) ? 'none' : 'block';
 
-  userInfo.title.style.display = (isLoading) ? 'none' : 'block';
-  userInfo.titleSkeleton.style.display = (isLoading) ? 'block' : 'none';
-
-  userInfo.description.style.display = (isLoading) ? 'none' : 'block';
-  userInfo.descriptionSkeleton.style.display = (isLoading) ? 'block' : 'none';
+  userAvatar.avatarSkeleton.style.display = (isLoading) ? 'block' : 'none';
+  userInfo.nameSkeleton.style.display = (isLoading) ? 'block' : 'none';
+  userInfo.aboutSkeleton.style.display = (isLoading) ? 'block' : 'none';
 };
 
 export const renderSkeleton = (isLoading) => {

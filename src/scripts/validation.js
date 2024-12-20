@@ -39,7 +39,7 @@ const checkInputValidity = (formElement, inputElement, validationConfig) => {
     inputElement.setCustomValidity(inputElement.dataset.errorText);
   } else {
     inputElement.setCustomValidity('');
-  };
+  }
 
   if (!inputElement.validity.valid) {
     showInputError(formElement, inputElement, validationConfig);

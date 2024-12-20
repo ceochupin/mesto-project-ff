@@ -6,14 +6,6 @@ const config = {
   }
 };
 
-// const checkResponse = (res) => {
-//   if (res.ok) {
-//     return res.json();
-//   }
-
-//   return Promise.reject(`Ошибка: ${res.status}`);
-// };
-
 const checkResponse = (res) => {
   return (res.ok) ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
 };
@@ -22,26 +14,26 @@ export const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers
   })
-    .then((res) => checkResponse(res));
+    .then(checkResponse);
 };
 
 export const getUserProfile = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
   })
-    .then((res) => checkResponse(res));
+    .then(checkResponse);
 };
 
-export const updateUserInfo = ( { titleName, descriptionAbout } ) => {
+export const updateUserInfo = ( { name, about } ) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
-      name: titleName,
-      about: descriptionAbout
+      name,
+      about
     })
   })
-    .then((res) => checkResponse(res));
+    .then(checkResponse);
 };
 
 export const addNewCard = ( { name, link } ) => {
@@ -49,11 +41,11 @@ export const addNewCard = ( { name, link } ) => {
     method: 'POST',
     headers: config.headers,
     body: JSON.stringify({
-      name: name,
-      link: link
+      name,
+      link
     })
   })
-    .then((res) => checkResponse(res));
+    .then(checkResponse);
 };
 
 export const deleteCard = (cardId) => {
@@ -64,21 +56,21 @@ export const deleteCard = (cardId) => {
     .then(checkResponse);
 };
 
-export const likedCard = (cardId, method = 'PUT') => {
+export const getLikedCard = (cardId, method = 'PUT') => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: method,
+    method,
     headers: config.headers
   })
-    .then((res) => checkResponse(res));
+    .then(checkResponse);
 };
 
-export const updateUserAvatar = (imageUrl) => {
+export const updateUserAvatar = (avatar) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
-      avatar: imageUrl
+      avatar
     })
   })
-    .then((res) => checkResponse(res));
+    .then(checkResponse);
 };

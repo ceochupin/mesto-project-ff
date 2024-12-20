@@ -1,5 +1,4 @@
-import { cardTemplate } from '../index.js';
-import { deleteCard, likedCard } from './api.js';
+import { deleteCard, getLikedCard } from './api.js';
 
 export const createCard = (
   {
@@ -9,6 +8,7 @@ export const createCard = (
     owner,
     _id,
   },
+  cardTemplate,
   userId,
   {
     handleLikeCard,
@@ -65,8 +65,9 @@ export const handleLikeCard = ( { button, cardId, counter } ) => {
   }
 
   (
-    button.classList.contains('card__like-button_is-active') ?
-    likedCard(cardId, 'DELETE') : likedCard(cardId)
+    button.classList.contains('card__like-button_is-active')
+    ? getLikedCard(cardId, 'DELETE')
+    : getLikedCard(cardId)
   )
     .then((card) => updateLikeStateAndCouter(card))
     .catch((err) => console.log(err))
