@@ -35,11 +35,11 @@ export const createCard = (
         cardId: _id
       });
     });
-  }
+  };
 
   if (likes.find((like) => like._id === userId)) {
     cardLikeButton.classList.add('card__like-button_is-active');
-  }
+  };
 
   cardLikeButton.addEventListener('click', () => {
     handleLikeCard({

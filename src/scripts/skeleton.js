@@ -10,11 +10,11 @@ export const setSkeletonCards = (countCards = 1, method = 'prepend', isLoading) 
     for (let i = 0; i < countCards; i++) {
       const card = skeletonCardTemplate.content.cloneNode(true);
       cardsContainer[method](card);
-    }
+    };
   } else {
     cardsContainer.querySelectorAll('.skeleton').forEach(card => card.remove());
-  }
-}
+  };
+};
 
 const setSkeletonProfile = (isLoading) => {
   userAvatar.avatar.style.display = (isLoading) ? 'none' : 'block';
@@ -31,4 +31,4 @@ export const renderSkeleton = (isLoading) => {
 
   setSkeletonCards(countCards, 'append', isLoading);
   setSkeletonProfile(isLoading);
-}
+};

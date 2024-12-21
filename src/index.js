@@ -82,16 +82,16 @@ renderSkeleton(true);
 const setUserAvatar = ({ name, avatar }) => {
   userAvatar.avatar.src = avatar;
   userAvatar.avatar.alt = `Аватар пользователя ${name}`;
-}
+};
 
 const setUserInfo = ({ name, about }) => {
   userInfo.name.textContent = name;
   userInfo.about.textContent = about;
-}
+};
 
 const loadingButtonState = (button, isLoading) => {
   button.textContent = (isLoading) ? 'Сохранение...' : 'Сохранить';
-}
+};
 
 const handleAvatarFormSubmit = (event) => {
   event.preventDefault();
