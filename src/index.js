@@ -4,15 +4,9 @@
 
 import './pages/index.css';
 
-import {
-  getInitialCards,
-  getUserProfile,
-  updateUserInfo,
-  addNewCard,
-  updateUserAvatar
-} from './scripts/api.js';
+import { mestoAPI } from './scripts/api.js';
 
-import { createCard, handleLikeCard, handleDeleteCard } from './scripts/card.js';
+import { createCard } from './scripts/card.js';
 import { openPopup, closePopup } from './scripts/modals.js';
 import { enableValidation, clearValidation } from './scripts/validation.js';
 
@@ -61,6 +55,11 @@ const fullImageCard = {
   caption: document.querySelector('.popup__caption'),
 }
 
+const confirmDeleteCard = {
+  popup: document.querySelector('.popup_type_delete-confirm'),
+  form: document.forms['delete-confirm'],
+}
+
 const validationConfig = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
@@ -69,7 +68,10 @@ const validationConfig = {
   errorClass: 'popup__error',
 }
 
-let userId = '';
+let userId = null;
+
+let currentCard = null;
+let currentCardId = null;
 
 /**********************************\
 * ЛОГИКА РАБОТЫ ПРИЛОЖЕНИЯ
@@ -77,11 +79,12 @@ let userId = '';
 
 renderSkeleton(true);
 
-const setUserAvatar = ( { name, avatar } ) => {
+const setUserAvatar = ({ name, avatar }) => {
   userAvatar.avatar.src = avatar;
   userAvatar.avatar.alt = `Аватар пользователя ${name}`;
 }
-const setUserInfo = ( { name, about } ) => {
+
+const setUserInfo = ({ name, about }) => {
   userInfo.name.textContent = name;
   userInfo.about.textContent = about;
 }
@@ -97,7 +100,7 @@ const handleAvatarFormSubmit = (event) => {
 
   const avatar = userAvatar.form.link.value;
 
-  updateUserAvatar(avatar)
+  mestoAPI.updateUserAvatar(avatar)
     .then((user) => {
       setUserAvatar({
         name: userInfo.name.textContent,
@@ -119,7 +122,7 @@ const handleProfileFormSubmit = (event) => {
     about: userInfo.form.about.value 
   }
 
-  updateUserInfo(info)
+  mestoAPI.updateUserInfo(info)
     .then((user) => {
       setUserInfo({
         name: user.name,
@@ -141,7 +144,7 @@ const handleNewCardFormSubmit = (event) => {
     link: newCardAdd.form.link.value
   };
 
-  addNewCard(newCardData)
+  mestoAPI.addNewCard(newCardData)
     .then((cardData) => {
       renderCard({ cardData });
       closePopup(newCardAdd.popup);
@@ -160,13 +163,45 @@ const handleImageClick = ( { name, link } ) => {
   openPopup(fullImageCard.popup);
 };
 
+const handleConfirmFormSubmit = (event) => {
+  event.preventDefault();
+
+  mestoAPI.deleteCard(currentCardId)
+    .then(() => {
+      currentCard.remove();
+      closePopup(confirmDeleteCard.popup);
+    })
+    .catch((err) => console.log(err));
+};
+
+const handleDeleteCard = ({ card, cardId }) => {
+  currentCard = card;
+  currentCardId = cardId;
+  openPopup(confirmDeleteCard.popup);
+};
+
+const handleLikeCard = ({ button, cardId, counter }) => {
+  const updateLikeStateAndCouter = (card) => {
+    counter.textContent = card.likes.length;
+    button.classList.toggle('card__like-button_is-active');
+  }
+
+  (
+    button.classList.contains('card__like-button_is-active')
+    ? mestoAPI.unLikedCard(cardId)
+    : mestoAPI.itLikedCard(cardId)
+  )
+    .then((card) => updateLikeStateAndCouter(card))
+    .catch((err) => console.log(err))
+};
+
 const callbacks = {
   handleLikeCard,
   handleDeleteCard,
   handleImageClick
 };
 
-const renderCard = ( { cardData, method = 'prepend'} ) => {
+const renderCard = ({ cardData, method = 'prepend'}) => {
   const cardElement = createCard(cardData, cardTemplate, userId, callbacks);
   cardsContainer[ method ](cardElement);
 };
@@ -174,6 +209,7 @@ const renderCard = ( { cardData, method = 'prepend'} ) => {
 userAvatar.form.addEventListener('submit', handleAvatarFormSubmit);
 userInfo.form.addEventListener('submit', handleProfileFormSubmit);
 newCardAdd.form.addEventListener('submit', handleNewCardFormSubmit);
+confirmDeleteCard.form.addEventListener('submit', handleConfirmFormSubmit);
 
 userAvatar.button.addEventListener('click', () => {
   clearValidation(userAvatar.form, validationConfig);
@@ -194,11 +230,9 @@ newCardAdd.button.addEventListener('click', () => {
   openPopup(newCardAdd.popup);
 });
 
-
-
 enableValidation(validationConfig);
 
-Promise.all([getInitialCards(), getUserProfile()])
+Promise.all([mestoAPI.getInitialCards(), mestoAPI.getUserProfile()])
   .then(([cards, user]) => {
     userId = user._id;
 
@@ -221,3 +255,4 @@ Promise.all([getInitialCards(), getUserProfile()])
   })
   .catch((err) => console.log(err))
   .finally(() => renderSkeleton(false));
+

@@ -9,6 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Mesto</title>
   </head>
+
   <body class="page">
     <div class="page__content">
       <header class="header page__section">
@@ -18,6 +19,7 @@
           class="logo header__logo"
         />
       </header>
+
       <main class="content">
         <section class="profile page__section">
           <div class="profile__edit-avatar-button">
@@ -41,13 +43,16 @@
 
           <button class="profile__add-button" type="button"></button>
         </section>
+
         <section class="places page__section">
           <ul class="places__list"></ul>
         </section>
       </main>
+
       <footer class="footer page__section">
         <p class="footer__copyright">© 2024 Mesto Russia</p>
       </footer>
+      
       <div class="popup popup_type_edit popup_is-animated">
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
@@ -175,6 +180,20 @@
 
           <p class="popup__caption"></p>
         </div>
+      </div>
+    </div>
+
+    <div class="popup popup_type_delete-confirm popup_is-animated">
+      <div class="popup__content">
+        <button type="button" class="popup__close"></button>
+
+        <h3 class="popup__title">Вы уверены?</h3>
+
+        <form class="popup__form" name="delete-confirm" novalidate>          
+          <button type="submit" class="button popup__button" name="button">
+            Да
+          </button>
+        </form>
       </div>
     </div>
 

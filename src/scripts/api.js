@@ -10,67 +10,50 @@ const checkResponse = (res) => {
   return (res.ok) ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
 };
 
-export const getInitialCards = () => {
-  return fetch(`${config.baseUrl}/cards`, {
-    headers: config.headers
-  })
-    .then(checkResponse);
-};
-
-export const getUserProfile = () => {
-  return fetch(`${config.baseUrl}/users/me`, {
-    headers: config.headers
-  })
-    .then(checkResponse);
-};
-
-export const updateUserInfo = ( { name, about } ) => {
-  return fetch(`${config.baseUrl}/users/me`, {
-    method: 'PATCH',
-    headers: config.headers,
-    body: JSON.stringify({
-      name,
-      about
-    })
-  })
-    .then(checkResponse);
-};
-
-export const addNewCard = ( { name, link } ) => {
-  return fetch(`${config.baseUrl}/cards`, {
-    method: 'POST',
-    headers: config.headers,
-    body: JSON.stringify({
-      name,
-      link
-    })
-  })
-    .then(checkResponse);
-};
-
-export const deleteCard = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/${cardId}`, {
-    method: 'DELETE',
-    headers: config.headers
-  })
-    .then(checkResponse);
-};
-
-export const getLikedCard = (cardId, method = 'PUT') => {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+const handleFetch = (method, url, body = {}) => {
+  const options = {
     method,
-    headers: config.headers
-  })
+    headers: config.headers,
+  };
+
+  if (Object.keys(body).length) {
+    options.body = JSON.stringify(body);
+  };
+
+  return fetch(`${config.baseUrl}${url}`, options)
     .then(checkResponse);
 };
 
-export const updateUserAvatar = (avatar) => {
-  return fetch(`${config.baseUrl}/users/me/avatar`, {
-    method: 'PATCH',
-    headers: config.headers,
-    body: JSON.stringify({
-      avatar
-    })
-  })
-    .then(checkResponse);
+export const mestoAPI = {
+  getInitialCards() {
+    return handleFetch('GET', '/cards');
+  },
+
+  getUserProfile() {
+    return handleFetch('GET', '/users/me');
+  },
+
+  updateUserAvatar(avatar) {
+    return handleFetch('PATCH', '/users/me/avatar', { avatar });
+  },
+
+  updateUserInfo({ name, about }) {
+    return handleFetch('PATCH', '/users/me', { name, about });
+  },
+
+  addNewCard({ name, link }) {
+    return handleFetch('POST', '/cards', { name, link });
+  },
+
+  deleteCard(cardId) {
+    return handleFetch('DELETE', `/cards/${cardId}`);
+  },
+
+  itLikedCard(cardId) {
+    return handleFetch('PUT', `/cards/likes/${cardId}`);
+  },
+
+  unLikedCard(cardId) {
+    return handleFetch('DELETE', `/cards/likes/${cardId}`);
+  }
 };

@@ -1,5 +1,3 @@
-import { deleteCard, getLikedCard } from './api.js';
-
 export const createCard = (
   {
     name,
@@ -57,24 +55,3 @@ export const createCard = (
 
   return cardElement;
 };
-
-export const handleLikeCard = ( { button, cardId, counter } ) => {
-  const updateLikeStateAndCouter = (card) => {
-    counter.textContent = card.likes.length;
-    button.classList.toggle('card__like-button_is-active');
-  }
-
-  (
-    button.classList.contains('card__like-button_is-active')
-    ? getLikedCard(cardId, 'DELETE')
-    : getLikedCard(cardId)
-  )
-    .then((card) => updateLikeStateAndCouter(card))
-    .catch((err) => console.log(err))
-}
-
-export const handleDeleteCard = ( { card, cardId } ) => {
-  deleteCard(cardId)
-    .then(() => card.remove())
-    .catch((err) => console.log(err));
-}

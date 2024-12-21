@@ -1,7 +1,6 @@
 .popup__content {
   max-inline-size: 430px;
   inline-size: 100%;
-  min-block-size: 330px;
   background: rgb(255 255 255);
   border-radius: 10px;
   position: relative;
