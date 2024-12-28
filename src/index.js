@@ -70,9 +70,6 @@ const validationConfig = {
 
 let userId = null;
 
-let currentCard = null;
-let currentCardId = null;
-
 /**********************************\
 * ЛОГИКА РАБОТЫ ПРИЛОЖЕНИЯ
 \**********************************/
@@ -163,21 +160,22 @@ const handleImageClick = ( { name, link } ) => {
   openPopup(fullImageCard.popup);
 };
 
-const handleConfirmFormSubmit = (event) => {
-  event.preventDefault();
-
-  mestoAPI.deleteCard(currentCardId)
-    .then(() => {
-      currentCard.remove();
-      closePopup(confirmDeleteCard.popup);
-    })
-    .catch((err) => console.log(err));
-};
-
 const handleDeleteCard = ({ card, cardId }) => {
-  currentCard = card;
-  currentCardId = cardId;
   openPopup(confirmDeleteCard.popup);
+
+  const handleConfirmFormSubmit = (event) => {
+    event.preventDefault();
+
+    mestoAPI.deleteCard(cardId)
+      .then(() => {
+        card.remove();
+        closePopup(confirmDeleteCard.popup);
+      })
+      .catch((err) => console.log(err))
+      .finally(confirmDeleteCard.form.removeEventListener('submit', handleConfirmFormSubmit));
+  };
+
+  confirmDeleteCard.form.addEventListener('submit', handleConfirmFormSubmit);
 };
 
 const handleLikeCard = ({ button, cardId, counter }) => {
@@ -209,7 +207,6 @@ const renderCard = ({ cardData, method = 'prepend'}) => {
 userAvatar.form.addEventListener('submit', handleAvatarFormSubmit);
 userInfo.form.addEventListener('submit', handleProfileFormSubmit);
 newCardAdd.form.addEventListener('submit', handleNewCardFormSubmit);
-confirmDeleteCard.form.addEventListener('submit', handleConfirmFormSubmit);
 
 userAvatar.button.addEventListener('click', () => {
   clearValidation(userAvatar.form, validationConfig);
